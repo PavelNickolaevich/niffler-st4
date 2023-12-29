@@ -34,9 +34,7 @@ public class SpendingTest {
 
         Selenide.open("http://127.0.0.1:3000/main", WelcomePage.class)
                 .clickLoginButton()
-                .loginPage()
                 .login(USERNAME, PASSWORD)
-                .mainPage()
                 .selectSpendingByDescription(spend.description())
                 .clickDeleteSelectedButton()
                 .checkTableIsEmpty();

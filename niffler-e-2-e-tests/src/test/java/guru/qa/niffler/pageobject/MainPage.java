@@ -13,18 +13,12 @@ public class MainPage {
     private final SelenideElement historyOfSpendingsTable = $(".spendings-table tbody");
     private final SelenideElement deleteSelectedBtn = $(byText("Delete selected"));
 
-    @Step("Переход на страницу Main page")
-    public MainPage mainPage() {
-        return this;
-    }
-
     @Step("Выбрать spend с описанием : {description}")
     public MainPage selectSpendingByDescription(String description) {
         historyOfSpendingsTable
                 .$$("tr")
                 .find(text(description))
-                .$$("td")
-                .first()
+                .$("td")
                 .scrollIntoView(true)
                 .click();
         return this;

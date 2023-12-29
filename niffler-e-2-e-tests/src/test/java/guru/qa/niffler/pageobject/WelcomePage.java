@@ -7,11 +7,11 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class WelcomePage {
 
-    private final SelenideElement logintBtn = $(".spendings-table tbody");
+    private final SelenideElement loginBtn = $("a[href*='redirect']");
 
     @Step("Нажать кнопку Login")
     public LoginPage clickLoginButton() {
-        logintBtn.click();
+        loginBtn.click();
         return new LoginPage();
     }
 }
