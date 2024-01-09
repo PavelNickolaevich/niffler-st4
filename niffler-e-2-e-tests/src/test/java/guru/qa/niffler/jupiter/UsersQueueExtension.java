@@ -7,7 +7,6 @@ import guru.qa.niffler.model.UserJson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.*;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -48,29 +47,32 @@ public class UsersQueueExtension implements BeforeEachCallback, AfterTestExecuti
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
         Map<User.UserType, UserJson> testCandidates = new HashMap<>();
+
         List<Parameter> parametersFromTest = Arrays.stream(context.getRequiredTestMethod().getParameters())
                 .collect(Collectors.toList());
-        Method[] methods = context.getRequiredTestClass().getDeclaredMethods();
-        List<Parameter> parametersFromBeforeEach = Arrays.stream(methods)
+
+        List<Parameter> parametersFromBeforeEach = Arrays.stream(context.getRequiredTestClass().getDeclaredMethods())
                 .filter(method -> method.isAnnotationPresent(BeforeEach.class))
-                .map(param -> param.getParameters()).flatMap(array -> Arrays.stream(array)).collect(Collectors.toList());
+                .map(param -> param.getParameters()).flatMap(array -> Arrays.stream(array))
+                .collect(Collectors.toList());
 
         List<Parameter> allParam = new ArrayList<>();
         allParam.addAll(parametersFromBeforeEach);
         allParam.addAll(parametersFromTest);
 
-        for (Parameter parameter : allParam) {
+        List<Parameter> filterParam = allParam.stream()
+                .filter(parameter -> parameter.getType().isAssignableFrom(UserJson.class) && parameter.getAnnotation(User.class) != null)
+                .collect(Collectors.toList());
+
+        for (Parameter parameter : filterParam) {
             User annotation = parameter.getAnnotation(User.class);
-            if (annotation != null && parameter.getType().isAssignableFrom(UserJson.class)) {
-                UserJson testCandidate = null;
-                Queue<UserJson> queue = users.get(annotation.value());
-                while (testCandidate == null) {
-                    testCandidate = queue.poll();
-                    testCandidates.put(testCandidate.testData().userType(), testCandidate);
-                }
-                context.getStore(NAMESPACE).put(context.getUniqueId(), testCandidates);
-                break;
+            UserJson testCandidate = null;
+            Queue<UserJson> queue = users.get(annotation.value());
+            while (testCandidate == null) {
+                testCandidate = queue.poll();
             }
+            testCandidates.put(testCandidate.testData().userType(), testCandidate);
+            context.getStore(NAMESPACE).put(context.getUniqueId(), testCandidates);
         }
     }
 
