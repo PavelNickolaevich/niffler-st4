@@ -1,13 +1,10 @@
 package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Selenide;
-import com.github.javafaker.Faker;
 import guru.qa.niffler.db.model.UserAuthEntity;
-import guru.qa.niffler.db.model.UserEntity;
 import guru.qa.niffler.db.repository.UserRepository;
 import guru.qa.niffler.jupiter.UserRepositoryExtension;
 import guru.qa.niffler.jupiter.annotations.DbUser;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -18,9 +15,6 @@ import static com.codeborne.selenide.Selenide.$;
 public class LoginTest extends BaseWebTest {
 
     private UserRepository userRepository;
-    private UserAuthEntity userAuth;
-    private UserEntity user;
-
 
     @DbUser(username = "",
             password = "")

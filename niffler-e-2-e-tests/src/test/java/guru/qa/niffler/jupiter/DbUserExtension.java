@@ -9,18 +9,17 @@ import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-@ExtendWith(UserRepositoryExtension.class)
 public class DbUserExtension implements BeforeEachCallback, ParameterResolver, AfterTestExecutionCallback {
 
     public static final ExtensionContext.Namespace NAMESPACE
             = ExtensionContext.Namespace.create(DbUserExtension.class);
 
     private Faker faker = new Faker();
-    private UserAuthEntity userAuth;
-    private UserEntity user;
-    private UserRepository userRepository;
+    private final UserRepository userRepository = new UserRepositoryJdbc();
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
@@ -29,6 +28,7 @@ public class DbUserExtension implements BeforeEachCallback, ParameterResolver, A
                 DbUser.class
         );
 
+        Map<String, Object> userData = new HashMap<>();
         if (dbUser.isPresent()) {
             DbUser dbUserData = dbUser.get();
             String userName = dbUserData.username();
@@ -37,7 +37,7 @@ public class DbUserExtension implements BeforeEachCallback, ParameterResolver, A
                 userName = faker.name().username();
                 password = faker.internet().password();
             }
-            userAuth = UserAuthEntity.builder()
+            UserAuthEntity userAuth = UserAuthEntity.builder()
                     .username(userName)
                     .password(password)
                     .enabled(true)
@@ -51,18 +51,35 @@ public class DbUserExtension implements BeforeEachCallback, ParameterResolver, A
                                 return ae;
                             }).toList()).build();
 
-            user = UserEntity.builder()
+            UserEntity user = UserEntity.builder()
                     .username(userName)
                     .currency(CurrencyValues.RUB)
                     .build();
 
-            userRepository = new UserRepositoryJdbc();
             userRepository.createInAuth(userAuth);
             userRepository.createInUserdata(user);
 
-            extensionContext.getStore(NAMESPACE)
-                    .put("userAuth", userAuth);
+            userData.put("userAuth", userAuth);
+            userData.put("user", user);
+        }
 
+        extensionContext.getStore(NAMESPACE)
+                .put(extensionContext.getUniqueId(), userData);
+    }
+
+    @Override
+    public void afterTestExecution(ExtensionContext extensionContext) throws Exception {
+
+        Optional<DbUser> dbUser = AnnotationSupport.findAnnotation(
+                extensionContext.getRequiredTestMethod(),
+                DbUser.class
+        );
+
+        Map userData = extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId(), Map.class);
+
+        if (dbUser.isPresent()) {
+            userRepository.deleteInAuthById(((UserAuthEntity) userData.get("userAuth")).getId());
+            userRepository.deleteInUserdataById(((UserEntity) userData.get("user")).getId());
         }
     }
 
@@ -75,21 +92,7 @@ public class DbUserExtension implements BeforeEachCallback, ParameterResolver, A
 
     @Override
     public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return extensionContext.getStore(DbUserExtension.NAMESPACE)
-                .get("userAuth", UserAuthEntity.class);
-    }
-
-    @Override
-    public void afterTestExecution(ExtensionContext extensionContext) throws Exception {
-
-        Optional<DbUser> dbUser = AnnotationSupport.findAnnotation(
-                extensionContext.getRequiredTestMethod(),
-                DbUser.class
-        );
-
-        if (dbUser.isPresent()) {
-            userRepository.deleteInAuthById(userAuth.getId());
-            userRepository.deleteInUserdataById(user.getId());
-        }
+        return extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId(), Map.class)
+                .get("userAuth");
     }
 }

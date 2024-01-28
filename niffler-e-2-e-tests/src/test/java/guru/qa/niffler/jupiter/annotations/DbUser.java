@@ -14,8 +14,8 @@ import java.lang.annotation.Target;
 @ExtendWith({DbUserExtension.class})
 public @interface DbUser {
 
-    String username();
+    String username() default "";
 
-    String password();
+    String password() default "";
 
 }
