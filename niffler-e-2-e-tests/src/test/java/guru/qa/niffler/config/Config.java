@@ -21,6 +21,6 @@ public interface Config {
   }
 
   default int jdbcPort() {
-    return 5432;
+    return 5433;
   }
 }
