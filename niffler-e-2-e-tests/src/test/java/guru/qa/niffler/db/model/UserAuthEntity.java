@@ -1,5 +1,6 @@
 package guru.qa.niffler.db.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
 public class UserAuthEntity {
   private UUID id;
   private String username;
@@ -18,4 +20,5 @@ public class UserAuthEntity {
   private Boolean accountNonLocked;
   private Boolean credentialsNonExpired;
   private List<AuthorityEntity> authorities = new ArrayList<>();
+
 }
