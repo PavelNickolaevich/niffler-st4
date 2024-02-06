@@ -183,12 +183,13 @@ public class UserRepositorySJdbc implements UserRepository {
                         return userPs;
                     }
                 });
-                authTemplate.batchUpdate("UPDATE \"authority\" SET authority = ? WHERE user_id = ? AND authority= ? ", new BatchPreparedStatementSetter() {
+                authTemplate.update("DELETE FROM \"authority\" WHERE user_id = ?", user.getId());
+                authTemplate.batchUpdate("INSERT  INTO \"authority\" (user_id, authority) VALUES (?, ?)", new BatchPreparedStatementSetter() {
                     @Override
                     public void setValues(PreparedStatement ps, int i) throws SQLException {
-                        ps.setString(1, user.getAuthorities().get(i).getAuthority().name());
-                        ps.setObject(2, user.getId());
-                        ps.setString(3, "Not Exists\"");
+                        ps.setObject(1, user.getId());
+                        ps.setString(2, user.getAuthorities().get(i).getAuthority().name());
+
                     }
 
                     @Override

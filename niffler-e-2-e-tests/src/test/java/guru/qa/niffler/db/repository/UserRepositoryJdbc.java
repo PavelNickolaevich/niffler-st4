@@ -169,10 +169,16 @@ public class UserRepositoryJdbc implements UserRepository {
                     "UPDATE \"user\" " +
                             "SET username = ?, password = ?, enabled = ? , account_non_expired = ? , account_non_locked = ?, credentials_non_expired = ? " +
                             "WHERE id = ? ");
+//                 PreparedStatement authorityPs = conn.prepareStatement(
+//                         "UPDATE \"authority\" " +
+//                                 "SET authority = ? " +
+//                                 "WHERE user_id = ? AND authority= ? ")
                  PreparedStatement authorityPs = conn.prepareStatement(
-                         "UPDATE \"authority\" " +
-                                 "SET authority = ? " +
-                                 "WHERE user_id = ? AND authority= ? ")
+                         "INSERT INTO \"authority\" " +
+                                 "(user_id, authority) VALUES (?, ?) ");
+                 PreparedStatement deleteAuthorityPs = conn.prepareStatement(
+                         "DELETE FROM \"authority\" WHERE  user_id = ?"
+                 )
             ) {
 
                 userPs.setString(1, user.getUsername());
@@ -187,11 +193,13 @@ public class UserRepositoryJdbc implements UserRepository {
                     throw new IllegalStateException(format("Can`t find user with id : %s", user.getId()));
                 }
 
+                deleteAuthorityPs.setObject(1, user.getId());
+                deleteAuthorityPs.executeUpdate();
+
                 UUID user_id = user.getId();
                 for (Authority authority : Authority.values()) {
-                    authorityPs.setString(1, authority.name());
-                    authorityPs.setObject(2, user_id);
-                    authorityPs.setObject(3, "Not Exists");
+                    authorityPs.setObject(1, user.getId());
+                    authorityPs.setObject(2, authority.name());
                     authorityPs.addBatch();
                     authorityPs.clearParameters();
                 }
