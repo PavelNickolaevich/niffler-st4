@@ -1,6 +1,6 @@
 package guru.qa.niffler.test;
 
-import guru.qa.niffler.jupiter.BrowserExtension;
+import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.pageobject.AllPeoplePage;
 import guru.qa.niffler.pageobject.FriendsPage;
 import guru.qa.niffler.pageobject.HeaderFragment;

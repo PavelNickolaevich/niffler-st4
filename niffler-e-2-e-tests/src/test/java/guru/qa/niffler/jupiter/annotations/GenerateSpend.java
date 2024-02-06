@@ -1,7 +1,7 @@
 package guru.qa.niffler.jupiter.annotations;
 
-import guru.qa.niffler.jupiter.SpendExtension;
-import guru.qa.niffler.jupiter.SpendResolverExtension;
+import guru.qa.niffler.jupiter.extension.SpendExtension;
+import guru.qa.niffler.jupiter.extension.SpendResolverExtension;
 import guru.qa.niffler.model.CurrencyValues;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -15,13 +15,13 @@ import java.lang.annotation.Target;
 @ExtendWith({SpendExtension.class, SpendResolverExtension.class})
 public @interface GenerateSpend {
 
-  String username();
+    String username();
 
-  String description();
+    String description();
 
-  String category();
+    String category();
 
-  double amount();
+    double amount();
 
-  CurrencyValues currency();
+    CurrencyValues currency();
 }
