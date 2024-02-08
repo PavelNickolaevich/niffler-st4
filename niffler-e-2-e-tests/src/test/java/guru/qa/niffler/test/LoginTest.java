@@ -34,6 +34,19 @@ public class LoginTest extends BaseWebTest {
         $(".main-content__section-stats").should(visible);
     }
 
+    @Test
+    void checkHibernateTest() {
+
+        UserEntity userMork = UserEntity.builder()
+                .username("БезумныйМак3с")
+                .currency(CurrencyValues.RUB)
+                .firstname("Хитры3й")
+                .surname("Жестоки3й")
+                .photo("Фото Морка".getBytes(StandardCharsets.UTF_8))
+                .build();
+
+        userRepository.createInUserdata(userMork);
+    }
 
     @Test
     void checkUpdateUserInUserData() {

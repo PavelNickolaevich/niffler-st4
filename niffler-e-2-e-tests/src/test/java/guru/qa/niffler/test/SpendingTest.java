@@ -2,32 +2,46 @@ package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import guru.qa.niffler.db.model.CategoryEntity;
+import guru.qa.niffler.db.model.CurrencyValues;
+import guru.qa.niffler.db.model.SpendEntity;
+import guru.qa.niffler.db.repository.spend.SpendRepository;
+import guru.qa.niffler.jupiter.UserRepositoryExtension;
 import guru.qa.niffler.jupiter.annotations.GenerateCategory;
 import guru.qa.niffler.jupiter.annotations.GenerateSpend;
-import guru.qa.niffler.model.CurrencyValues;
+import guru.qa.niffler.jupiter.annotations.GenerateSpendDB;
+import guru.qa.niffler.jupiter.annotations.GenerateSpendRest;
+import guru.qa.niffler.jupiter.extension.SpendRepositoryExtension;
+import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.pageobject.WelcomePage;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.Calendar;
 
+@ExtendWith(SpendRepositoryExtension.class)
 public class SpendingTest extends BaseWebTest {
 
     private static final String USERNAME = "duck";
     private static final String PASSWORD = "12345";
+
+    private SpendRepository spendRepository;
+    private SpendEntity spendEntity;
 
     static {
         Configuration.browserSize = "1980x1024";
     }
 
     @GenerateCategory(
-            username = "duck",
-            category = "Угар"
+            username = "123",
+            category = "Угар6"
     )
     @GenerateSpend(
-            username = "duck",
-            description = "QA.GURU Advanced 4",
+            username = "123",
+            description = "QA.GURU Advanced 5",
             amount = 72500.00,
-            category = "Угар",
+            category = "Угар6",
             currency = CurrencyValues.RUB
     )
     @Test
@@ -39,5 +53,49 @@ public class SpendingTest extends BaseWebTest {
                 .selectSpendingByDescription(spend.description())
                 .clickDeleteSelectedButton()
                 .checkTableIsEmpty();
+    }
+
+    @Test
+    @GenerateSpendRest(
+            username = "123",
+            description = "Judgment Day123",
+            amount = 100000.00,
+            category = "Rest",
+            currency = CurrencyValues.RUB
+    )
+    void checkRestCreateCategoryAndSpend() {
+
+    }
+
+    @Test
+    @GenerateSpendDB(
+            username = "123",
+            description = "Judgment Day321",
+            amount = 100000.00,
+            category = "DataBase",
+            currency = CurrencyValues.RUB
+    )
+    void checkDBCreateCategoryAndSpend() {
+
+    }
+
+
+
+    @Test
+    void checkSpendDataBase() {
+
+        CategoryEntity category = new CategoryEntity();
+        category.setCategory("Блэкджэк");
+        category.setUsername("Бендер");
+
+        spendEntity = new SpendEntity();
+        spendEntity.setUsername("Бэндер");
+        spendEntity.setSpendDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+        spendEntity.setCurrency(guru.qa.niffler.db.model.CurrencyValues.EUR);
+        spendEntity.setAmount(555.0);
+        spendEntity.setDescription("Азартные игры");
+        spendEntity.setCategory(category);
+
+        spendRepository.createSpend(spendEntity);
     }
 }

@@ -1,6 +1,7 @@
 package guru.qa.niffler.jupiter;
 
 import guru.qa.niffler.db.repository.UserRepository;
+import guru.qa.niffler.db.repository.UserRepositoryHibernate;
 import guru.qa.niffler.db.repository.UserRepositoryJdbc;
 import guru.qa.niffler.db.repository.UserRepositorySJdbc;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ public class UserRepositoryExtension implements TestInstancePostProcessor {
                 switch (System.getProperty("repository")) {
                     case "sjdbc" -> repository = new UserRepositorySJdbc();
                     case "jdbc" -> repository = new UserRepositoryJdbc();
+                    case "hibernate" -> repository = new UserRepositoryHibernate();
                     default -> throw new IllegalArgumentException();
                 }
                 log.info(System.getProperty("repository"));
