@@ -17,10 +17,10 @@ public interface Config {
   }
 
   default String jdbcPassword() {
-    return "secret";
+    return "root";
   }
 
   default int jdbcPort() {
-    return 5433;
+    return 5432;
   }
 }
