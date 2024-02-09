@@ -37,7 +37,7 @@ public class SpendEntity {
     @Column()
     private String description;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private CategoryEntity category;
 

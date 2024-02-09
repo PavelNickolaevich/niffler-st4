@@ -85,11 +85,11 @@ public class SpendingTest extends BaseWebTest {
     void checkSpendDataBase() {
 
         CategoryEntity category = new CategoryEntity();
-        category.setCategory("Блэкджэк");
-        category.setUsername("Бендер");
+        category.setCategory("Блэкджэк1");
+        category.setUsername("Бендер1");
 
         spendEntity = new SpendEntity();
-        spendEntity.setUsername("Бэндер");
+        spendEntity.setUsername("Бэндер1");
         spendEntity.setSpendDate(new java.sql.Date(Calendar.getInstance().getTime().getTime()));
         spendEntity.setCurrency(guru.qa.niffler.db.model.CurrencyValues.EUR);
         spendEntity.setAmount(555.0);
