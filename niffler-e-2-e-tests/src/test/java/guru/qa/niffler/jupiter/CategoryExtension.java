@@ -1,6 +1,6 @@
 package guru.qa.niffler.jupiter;
 
-import guru.qa.niffler.api.CategoryApi;
+import guru.qa.niffler.api.category.CategoryApi;
 import guru.qa.niffler.jupiter.annotations.GenerateCategory;
 import guru.qa.niffler.model.CategoryJson;
 import okhttp3.OkHttpClient;
