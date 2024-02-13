@@ -47,7 +47,7 @@ public class ProfilePage extends BasePage<ProfilePage> {
     }
 
 
-    public ProfilePage submitProfile() throws InterruptedException {
+    public ProfilePage submitProfile() {
         submitBtn.click();
         return this;
     }

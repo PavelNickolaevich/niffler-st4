@@ -10,16 +10,6 @@ import org.junit.platform.commons.support.AnnotationSupport;
 
 public class IssueExtension implements ExecutionCondition {
 
-
-//    private static final OkHttpClient httpClient = new OkHttpClient.Builder().build();
-//    private static final Retrofit retrofit = new Retrofit.Builder()
-//            .client(httpClient)
-//            .baseUrl("https://api.github.com")
-//            .addConverterFactory(JacksonConverterFactory.create())
-//            .build();
-//
-//    private final GhApi ghApi = retrofit.create(GhApi.class);
-
     private final GhApiClient ghApiClient = new GhApiClient();
 
     @SneakyThrows
@@ -36,11 +26,6 @@ public class IssueExtension implements ExecutionCondition {
         );
 
         if (disabledByIssue != null) {
-
-//            JsonNode responseBody = ghApi.issue(
-//                    "Bearer " + System.getenv("GH_TOKEN"),
-//                    disabledByIssue.value()
-//            ).execute().body();
 
             return "open".equals(ghApiClient.getIssueState(disabledByIssue.value()))
                     ? ConditionEvaluationResult.disabled("Disabled by issue #" + disabledByIssue.value())
