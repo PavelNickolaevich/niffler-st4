@@ -1,6 +1,7 @@
 package guru.qa.niffler.api.category;
 
 import guru.qa.niffler.api.RestClient;
+import guru.qa.niffler.config.Config;
 import guru.qa.niffler.model.CategoryJson;
 
 import javax.annotation.Nonnull;
@@ -10,8 +11,8 @@ public class CategoryApiClient extends RestClient {
 
     CategoryApi categoryApi;
 
-    public CategoryApiClient(@Nonnull String baseUri) {
-        super(baseUri);
+    public CategoryApiClient() {
+        super(Config.getInstance().frontUrl());
         this.categoryApi = retrofit.create(CategoryApi.class);
     }
 

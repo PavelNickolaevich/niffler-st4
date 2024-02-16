@@ -20,7 +20,7 @@ public class CategoryExtension implements BeforeEachCallback {
     public static final ExtensionContext.Namespace NAMESPACE
             = ExtensionContext.Namespace.create(CategoryExtension.class);
 
-    private final CategoryApiClient categoryApiClient = new CategoryApiClient(BASE_URI);
+    private final CategoryApiClient categoryApiClient = new CategoryApiClient();
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
@@ -41,7 +41,7 @@ public class CategoryExtension implements BeforeEachCallback {
             var createdCategory = categoryApiClient.addCategory(categoryJson);
 
             extensionContext.getStore(NAMESPACE)
-                    .put("category", createdCategory);
+                    .put(extensionContext.getUniqueId(), createdCategory);
         }
     }
 }

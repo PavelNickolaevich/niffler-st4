@@ -19,7 +19,8 @@ public class ProfileTest extends BaseWebTest {
                 .login(userAuth.getUsername(), userAuth.getPassword())
                 .clickProfileBtn();
 
-        new ProfilePage()
+
+        profilePage
                 .setName("Один")
                 .setSurname("Два")
                 .selectCurrency(CurrencyValues.USD)

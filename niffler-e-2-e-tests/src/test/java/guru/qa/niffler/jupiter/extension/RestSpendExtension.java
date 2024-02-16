@@ -20,8 +20,8 @@ public class RestSpendExtension extends SpendExtension implements BeforeEachCall
     public static final ExtensionContext.Namespace NAMESPACE
             = ExtensionContext.Namespace.create(RestSpendExtension.class);
 
-    private final CategoryApiClient categoryApiClient = new CategoryApiClient(BASE_URI);
-    private final SpendApiClient spendApiClient = new SpendApiClient(BASE_URI);
+    private final CategoryApiClient categoryApiClient = new CategoryApiClient();
+    private final SpendApiClient spendApiClient = new SpendApiClient();
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
