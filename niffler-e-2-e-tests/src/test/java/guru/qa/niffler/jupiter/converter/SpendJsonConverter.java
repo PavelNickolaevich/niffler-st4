@@ -10,7 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class SpendJsonConverter implements ArgumentConverter {
+public class SpendJsonConverter implements ArgumentConverter{
 
   private static final ObjectMapper om = new ObjectMapper();
 

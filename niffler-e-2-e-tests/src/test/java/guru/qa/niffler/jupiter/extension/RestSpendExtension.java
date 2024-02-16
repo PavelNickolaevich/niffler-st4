@@ -1,17 +1,13 @@
 package guru.qa.niffler.jupiter.extension;
 
-import guru.qa.niffler.api.CategoryApi;
-import guru.qa.niffler.api.SpendApi;
-import guru.qa.niffler.jupiter.annotations.GenerateSpend;
+import guru.qa.niffler.api.category.CategoryApiClient;
+import guru.qa.niffler.api.spend.SpendApiClient;
 import guru.qa.niffler.jupiter.annotations.GenerateSpendRest;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
-import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.platform.commons.support.AnnotationSupport;
-import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.IOException;
 import java.util.Date;
@@ -19,18 +15,13 @@ import java.util.Optional;
 
 public class RestSpendExtension extends SpendExtension implements BeforeEachCallback {
 
+    private static final String BASE_URI = "http://127.0.0.1:8093";
+
     public static final ExtensionContext.Namespace NAMESPACE
             = ExtensionContext.Namespace.create(RestSpendExtension.class);
 
-    private static final OkHttpClient httpClient = new OkHttpClient.Builder().build();
-    private static final Retrofit retrofit = new Retrofit.Builder()
-            .client(httpClient)
-            .baseUrl("http://127.0.0.1:8093")
-            .addConverterFactory(JacksonConverterFactory.create())
-            .build();
-
-    private final SpendApi spendApi = retrofit.create(SpendApi.class);
-    private final CategoryApi categoryApi = retrofit.create(CategoryApi.class);
+    private final CategoryApiClient categoryApiClient = new CategoryApiClient();
+    private final SpendApiClient spendApiClient = new SpendApiClient();
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
@@ -58,8 +49,8 @@ public class RestSpendExtension extends SpendExtension implements BeforeEachCall
                     spendData.username()
             );
 
-            categoryApi.addCategory(categoryJson).execute();
-            SpendJson created = spendApi.addSpend(spendJson).execute().body();
+            categoryApiClient.addCategory(categoryJson);
+            SpendJson created = spendApiClient.addSpend(spendJson);
             extensionContext.getStore(NAMESPACE)
                     .put(extensionContext.getUniqueId(), created);
         }
@@ -68,7 +59,7 @@ public class RestSpendExtension extends SpendExtension implements BeforeEachCall
     @Override
     SpendJson create(SpendJson spend) {
         try {
-            return spendApi.addSpend(spend).execute().body();
+            return spendApiClient.addSpend(spend);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

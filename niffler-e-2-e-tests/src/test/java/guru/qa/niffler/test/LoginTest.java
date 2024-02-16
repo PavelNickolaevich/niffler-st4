@@ -21,21 +21,9 @@ import java.util.Arrays;
 @ExtendWith(UserRepositoryExtension.class)
 public class LoginTest extends BaseWebTest {
 
-  private UserRepository userRepository;
-
-  private UserAuthEntity userAuth;
-  private UserEntity user;
-
-
-  @BeforeEach
-  void createUser() {
-    userAuth = new UserAuthEntity();
-    userAuth.setUsername("valentin_7");
-    userAuth.setPassword("12345");
-    userAuth.setEnabled(true);
-    userAuth.setAccountNonExpired(true);
-    userAuth.setAccountNonLocked(true);
-    userAuth.setCredentialsNonExpired(true);
+    private UserRepository userRepository;
+    private UserEntity userEntity;
+    private Authority authority;
 
     @DbUser(username = "",
             password = "")
@@ -62,41 +50,6 @@ public class LoginTest extends BaseWebTest {
 
         userRepository.createInUserdata(userMork);
     }
-    AuthorityEntity[] authorities = Arrays.stream(Authority.values()).map(
-        a -> {
-          AuthorityEntity ae = new AuthorityEntity();
-          ae.setAuthority(a);
-          return ae;
-        }
-    ).toArray(AuthorityEntity[]::new);
-
-    userAuth.addAuthorities(authorities);
-
-    user = new UserEntity();
-    user.setUsername("valentin_7");
-    user.setCurrency(CurrencyValues.RUB);
-    userRepository.createInAuth(userAuth);
-    userRepository.createInUserdata(user);
-  }
-
-  @AfterEach
-  void removeUser() {
-    userRepository.deleteInAuthById(userAuth.getId());
-    userRepository.deleteInUserdataById(user.getId());
-  }
-
-  @DbUser()
-  @Test
-  void statisticShouldBeVisibleAfterLogin() {
-    Selenide.open(WelcomePage.URL, WelcomePage.class)
-        .doLogin()
-        .fillLoginPage(userAuth.getUsername(), userAuth.getPassword())
-        .submit();
-
-    new MainPage()
-        .waitForPageLoaded();
-  }
-}
 
     @Test
     void checkUpdateUserInUserData() {
@@ -172,4 +125,50 @@ public class LoginTest extends BaseWebTest {
         userRepository.deleteInAuthById(userGork.getId());
 
     }
+
+
+  @BeforeEach
+  void createUser() {
+    userAuth = new UserAuthEntity();
+    userAuth.setUsername("valentin_7");
+    userAuth.setPassword("12345");
+    userAuth.setEnabled(true);
+    userAuth.setAccountNonExpired(true);
+    userAuth.setAccountNonLocked(true);
+    userAuth.setCredentialsNonExpired(true);
+
+    AuthorityEntity[] authorities = Arrays.stream(Authority.values()).map(
+        a -> {
+          AuthorityEntity ae = new AuthorityEntity();
+          ae.setAuthority(a);
+          return ae;
+        }
+    ).toArray(AuthorityEntity[]::new);
+
+    userAuth.addAuthorities(authorities);
+
+    user = new UserEntity();
+    user.setUsername("valentin_7");
+    user.setCurrency(CurrencyValues.RUB);
+    userRepository.createInAuth(userAuth);
+    userRepository.createInUserdata(user);
+  }
+
+  @AfterEach
+  void removeUser() {
+    userRepository.deleteInAuthById(userAuth.getId());
+    userRepository.deleteInUserdataById(user.getId());
+  }
+
+  @DbUser()
+  @Test
+  void statisticShouldBeVisibleAfterLogin() {
+    Selenide.open(WelcomePage.URL, WelcomePage.class)
+        .doLogin()
+        .fillLoginPage(userAuth.getUsername(), userAuth.getPassword())
+        .submit();
+
+    new MainPage()
+        .waitForPageLoaded();
+  }
 }

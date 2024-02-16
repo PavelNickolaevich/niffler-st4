@@ -14,6 +14,7 @@ public interface Config {
 
   String jdbcHost();
 
+
   default String jdbcUser() {
     return "postgres";
   }

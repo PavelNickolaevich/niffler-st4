@@ -1,4 +1,4 @@
-package guru.qa.niffler.api;
+package guru.qa.niffler.api.github;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import retrofit2.Call;

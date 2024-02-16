@@ -1,6 +1,7 @@
-package guru.qa.niffler.pageobject;
+package guru.qa.niffler.pageobject.fragment;
 
 import com.codeborne.selenide.SelenideElement;
+import guru.qa.niffler.page.BasePage;
 import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$x;
@@ -28,7 +29,8 @@ public class HeaderFragment {
     }
 
     @Step("Перейти в Profile")
-    public void clickProfileBtn() {
+    public HeaderFragment clickProfileBtn() {
         profileBtn.click();
+        return this;
     }
 }
