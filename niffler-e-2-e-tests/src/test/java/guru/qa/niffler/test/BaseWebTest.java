@@ -1,6 +1,7 @@
 package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Configuration;
+import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.pageobject.AllPeoplePage;
 import guru.qa.niffler.pageobject.FriendsPage;
@@ -13,6 +14,10 @@ import org.openqa.selenium.devtools.v85.profiler.model.Profile;
 @ExtendWith({BrowserExtension.class})
 //@ExtendWith(UsersQueueExtension.class)
 public abstract class BaseWebTest {
+  
+  protected static final Config CFG = Config.getInstance();
+  
+  
     static {
         Configuration.browserSize = "1980x1024";
     }
@@ -24,6 +29,5 @@ public abstract class BaseWebTest {
     protected ProfilePage profilePage = new ProfilePage();
 
     protected final String BASE_URL = "http://127.0.0.1:3000/main";
-
-
+  
 }

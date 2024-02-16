@@ -3,6 +3,13 @@ package guru.qa.niffler.db.repository;
 import guru.qa.niffler.db.DataSourceProvider;
 import guru.qa.niffler.db.Database;
 import guru.qa.niffler.db.model.*;
+import guru.qa.niffler.db.model.Authority;
+import guru.qa.niffler.db.model.AuthorityEntity;
+import guru.qa.niffler.db.model.CurrencyValues;
+import guru.qa.niffler.db.model.UserAuthEntity;
+import guru.qa.niffler.db.model.UserEntity;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Step;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -77,6 +84,39 @@ public class UserRepositoryJdbc implements UserRepository {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+
+  @Step("Create user in auth")
+  @Override
+  public UserAuthEntity createInAuth(UserAuthEntity user) {
+    try (Connection conn = authDs.getConnection()) {
+      conn.setAutoCommit(false);
+
+      try (PreparedStatement userPs = conn.prepareStatement(
+          "INSERT INTO \"user\" " +
+              "(username, password, enabled, account_non_expired, account_non_locked, credentials_non_expired) " +
+              "VALUES (?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
+           PreparedStatement authorityPs = conn.prepareStatement(
+               "INSERT INTO \"authority\" " +
+                   "(user_id, authority) " +
+                   "VALUES (?, ?)")
+      ) {
+
+        userPs.setString(1, user.getUsername());
+        userPs.setString(2, pe.encode(user.getPassword()));
+        userPs.setBoolean(3, user.getEnabled());
+        userPs.setBoolean(4, user.getAccountNonExpired());
+        userPs.setBoolean(5, user.getAccountNonLocked());
+        userPs.setBoolean(6, user.getCredentialsNonExpired());
+
+        userPs.executeUpdate();
+
+        UUID authUserId;
+        try (ResultSet keys = userPs.getGeneratedKeys()) {
+          if (keys.next()) {
+            authUserId = UUID.fromString(keys.getString("id"));
+          } else {
+            throw new IllegalStateException("Can`t find id");
+          }
         }
         return user;
     }
