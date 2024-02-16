@@ -14,12 +14,13 @@ public interface Config {
 
   String jdbcHost();
 
+
   default String jdbcUser() {
     return "postgres";
   }
 
   default String jdbcPassword() {
-    return "secret";
+    return "root";
   }
 
   default int jdbcPort() {

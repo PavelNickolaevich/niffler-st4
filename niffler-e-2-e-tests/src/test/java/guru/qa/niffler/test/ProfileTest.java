@@ -79,4 +79,23 @@ public class ProfileTest extends BaseWebTest {
         .getHeader()
         .checkAvatar("images/duck.jpg");
   }
+  
+  
+    @DbUser(username = "777",
+            password = "787")
+    @Test
+    void updateProfile(UserAuthEntity userAuth) throws Exception {
+        Selenide.open("http://127.0.0.1:3000/main", WelcomePage.class)
+                .clickLoginButton()
+                .login(userAuth.getUsername(), userAuth.getPassword())
+                .clickProfileBtn();
+
+
+        profilePage
+                .setName("Один")
+                .setSurname("Два")
+                .selectCurrency(CurrencyValues.USD)
+                .addNewCategory("Три")
+                .submitProfile();
+    }
 }

@@ -1,6 +1,7 @@
-package guru.qa.niffler.api;
+package guru.qa.niffler.api.github;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import guru.qa.niffler.api.RestClient;
 import io.qameta.allure.Step;
 
 import java.io.IOException;

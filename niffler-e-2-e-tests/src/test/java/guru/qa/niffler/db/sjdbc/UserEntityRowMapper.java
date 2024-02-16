@@ -15,13 +15,16 @@ public class UserEntityRowMapper implements RowMapper<UserEntity> {
 
   @Override
   public UserEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
-    UserEntity user = new UserEntity();
-    user.setId(rs.getObject("id", UUID.class));
-    user.setUsername(rs.getString("username"));
-    user.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
-    user.setFirstname(rs.getString("firstname"));
-    user.setSurname(rs.getString("surname"));
-    user.setPhoto(rs.getBytes("photo"));
+    UserEntity user;
+    user = UserEntity.builder()
+            .id(rs.getObject("id", UUID.class))
+            .username(rs.getString("username"))
+            .currency(CurrencyValues.valueOf(rs.getString("currency")))
+            .firstname(rs.getString("firstname"))
+            .surname(rs.getString("surname"))
+            .photo(rs.getBytes("photo"))
+            .build();
+
     return user;
   }
 }

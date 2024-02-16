@@ -1,31 +1,18 @@
 package guru.qa.niffler.db.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "\"user\"")
 public class UserEntity {
   @Id
@@ -57,25 +44,25 @@ public class UserEntity {
 
   public void addFriends(boolean pending, UserEntity... friends) {
     List<FriendsEntity> friendsEntities = Stream.of(friends)
-        .map(f -> {
-          FriendsEntity fe = new FriendsEntity();
-          fe.setUser(this);
-          fe.setFriend(f);
-          fe.setPending(pending);
-          return fe;
-        }).toList();
+            .map(f -> {
+              FriendsEntity fe = new FriendsEntity();
+              fe.setUser(this);
+              fe.setFriend(f);
+              fe.setPending(pending);
+              return fe;
+            }).toList();
     this.friends.addAll(friendsEntities);
   }
 
   public void addInvitations(UserEntity... invitations) {
     List<FriendsEntity> invitationsEntities = Stream.of(invitations)
-        .map(i -> {
-          FriendsEntity fe = new FriendsEntity();
-          fe.setUser(i);
-          fe.setFriend(this);
-          fe.setPending(true);
-          return fe;
-        }).toList();
+            .map(i -> {
+              FriendsEntity fe = new FriendsEntity();
+              fe.setUser(i);
+              fe.setFriend(this);
+              fe.setPending(true);
+              return fe;
+            }).toList();
     this.invites.addAll(invitationsEntities);
   }
 
