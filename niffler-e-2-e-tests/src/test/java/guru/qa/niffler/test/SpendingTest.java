@@ -15,10 +15,14 @@ import guru.qa.niffler.jupiter.extension.SpendRepositoryExtension;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.pageobject.WelcomePage;
+import guru.qa.niffler.page.MainPage;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Calendar;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Selenide.$;
 
 @ExtendWith(SpendRepositoryExtension.class)
 public class SpendingTest extends BaseWebTest {
@@ -64,6 +68,9 @@ public class SpendingTest extends BaseWebTest {
             currency = CurrencyValues.RUB
     )
     void checkRestCreateCategoryAndSpend() {
+    new MainPage()
+        .getSpendingTable()
+        .checkTableContains(spend);
 
     }
 
@@ -98,4 +105,13 @@ public class SpendingTest extends BaseWebTest {
 
         spendRepository.createSpend(spendEntity);
     }
+//    Allure.step("Delete spending", () -> $(byText("Delete selected"))
+//        .click());
+//
+//    Allure.step("Check that spending was deleted", () -> {
+//      $(".spendings-table tbody")
+//          .$$("tr")
+//          .shouldHave(size(0));
+//    });
+  }
 }

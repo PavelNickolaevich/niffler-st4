@@ -11,6 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 //@ExtendWith(UsersQueueExtension.class)
 public abstract class BaseWebTest {
 
+  protected static final Config CFG = Config.getInstance();
+
+
     protected FriendsPage friendsPage = new FriendsPage();
     protected AllPeoplePage allPeoplePage = new AllPeoplePage();
     protected MainPage mainPage = new MainPage();
