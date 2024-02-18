@@ -54,4 +54,8 @@ public class FriendsPage extends BasePage<FriendsPage> {
     }
 
 
+    @Override
+    public FriendsPage waitForPageLoaded() {
+        return null;
+    }
 }

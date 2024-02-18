@@ -12,7 +12,7 @@ public class CategoryApiClient extends RestClient {
     CategoryApi categoryApi;
 
     public CategoryApiClient() {
-        super(Config.getInstance().frontUrl());
+        super(Config.getInstance().categoryUrl());
         this.categoryApi = retrofit.create(CategoryApi.class);
     }
 

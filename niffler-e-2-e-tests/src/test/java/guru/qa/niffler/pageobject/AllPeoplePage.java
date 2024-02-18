@@ -31,4 +31,8 @@ public class AllPeoplePage extends BasePage<AllPeoplePage> {
                 .shouldBe(visible);
     }
 
+    @Override
+    public AllPeoplePage waitForPageLoaded() {
+        return null;
+    }
 }

@@ -14,7 +14,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@ExtendWith({SpendResolverExtension.class, DatabaseSpendExtension.class, RestSpendExtension.class})
+@ExtendWith(DatabaseSpendExtension.class)
+@ExtendWith({SpendResolverExtension.class, RestSpendExtension.class})
 public @interface GenerateSpend {
 
     String username();

@@ -37,6 +37,8 @@ public class UsersQueueExtension implements BeforeEachCallback, AfterTestExecuti
         commonQueue.add(user("barsik", "12345", COMMON));
 
         invitationSendQueue.add(user("loki", "12345", INVITATION_SEND));
+        invitationSendQueue.add(user("thor", "12345", INVITATION_RECEIVED));
+
 
         receivedQueue.add(user("thor", "12345", INVITATION_RECEIVED));
 

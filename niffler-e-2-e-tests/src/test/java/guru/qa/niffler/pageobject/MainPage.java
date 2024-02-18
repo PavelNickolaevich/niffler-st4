@@ -103,4 +103,8 @@ public class MainPage extends BasePage<MainPage> {
         allTimeBtn.click();
     }
 
+    @Override
+    public MainPage waitForPageLoaded() {
+        return null;
+    }
 }

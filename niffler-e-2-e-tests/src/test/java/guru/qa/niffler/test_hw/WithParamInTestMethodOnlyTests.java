@@ -47,7 +47,7 @@ public class WithParamInTestMethodOnlyTests extends BaseWebTest {
 
     @Test
     void checkUserReceivedFriendRequestWithTwoParams(@User(INVITATION_RECEIVED) UserJson user, @User(INVITATION_SEND) UserJson userRec) {
-        loginUser(user.username(),user.testData().password());
+        loginUser(user.username(), user.testData().password());
 
         headerFragment.
                 clickFriendsBtn();

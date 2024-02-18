@@ -13,7 +13,7 @@ public class SpendApiClient extends RestClient {
     private SpendApi spendApi;
 
     public SpendApiClient() {
-        super(Config.getInstance().frontUrl());
+        super(Config.getInstance().spendUrl());
         this.spendApi = retrofit.create(SpendApi.class);
     }
 

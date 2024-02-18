@@ -17,7 +17,8 @@ public class WelcomePage {
     }
 
     @Step("Перейти в регистрацию")
-    public void clickRegBtn() {
-        loginBtn.click();
+    public RegisterPage clickRegBtn() {
+        registerBtn.click();
+        return new RegisterPage();
     }
 }
