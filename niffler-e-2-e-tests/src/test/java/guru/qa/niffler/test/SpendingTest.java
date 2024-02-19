@@ -5,20 +5,15 @@ import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.db.model.CurrencyValues;
 import guru.qa.niffler.db.model.SpendEntity;
 import guru.qa.niffler.db.repository.spend.SpendRepository;
-import guru.qa.niffler.jupiter.annotations.DisabledByIssue;
 import guru.qa.niffler.jupiter.annotations.GenerateCategory;
-import guru.qa.niffler.jupiter.annotations.GenerateSpend;
 import guru.qa.niffler.jupiter.annotations.GenerateSpendRest;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.pageobject.WelcomePage;
-import io.qameta.allure.Allure;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
 public class SpendingTest extends BaseWebTest {
@@ -49,10 +44,14 @@ public class SpendingTest extends BaseWebTest {
 
         Selenide.open("http://127.0.0.1:3000/main", WelcomePage.class)
                 .clickLoginButton()
-                .login(USERNAME, PASSWORD)
-                .selectSpendingByDescription(spend.description())
-                .clickDeleteSelectedButton()
-                .checkTableIsEmpty();
+                .login(USERNAME, PASSWORD);
+
+        new MainPage()
+                .getSpendingTable();
+
+//                .selectSpendingByDescription(spend.description())
+//                .clickDeleteSelectedButton()
+//                .checkTableIsEmpty();
     }
 
     @BeforeEach
@@ -72,7 +71,7 @@ public class SpendingTest extends BaseWebTest {
             currency = CurrencyValues.RUB
     )
 
- //   @DisabledByIssue("74")
+    //   @DisabledByIssue("74")
     @Test
     void spendingShouldBeDeletedByButtonDeleteSpending(SpendJson spend) {
         $(".spendings-table tbody")

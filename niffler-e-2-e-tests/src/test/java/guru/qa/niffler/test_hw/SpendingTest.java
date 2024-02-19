@@ -10,15 +10,17 @@ import guru.qa.niffler.jupiter.annotations.GenerateCategory;
 import guru.qa.niffler.jupiter.annotations.GenerateSpendDB;
 import guru.qa.niffler.jupiter.annotations.GenerateSpendRest;
 import guru.qa.niffler.model.SpendJson;
+import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.pageobject.WelcomePage;
 import guru.qa.niffler.test.BaseWebTest;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Calendar;
 
 public class SpendingTest extends BaseWebTest {
 
-    private static final String USERNAME = "loki";
+    private static final String USERNAME = "duck";
     private static final String PASSWORD = "12345";
 
     private SpendRepository spendRepository;
@@ -44,7 +46,10 @@ public class SpendingTest extends BaseWebTest {
 
         Selenide.open("http://127.0.0.1:3000/main", WelcomePage.class)
                 .clickLoginButton()
-                .login(USERNAME, PASSWORD)
+                .login(USERNAME, PASSWORD);
+
+        mainPage
+                .getSpendingTable()
                 .selectSpendingByDescription(spend.description())
                 .clickDeleteSelectedButton()
                 .checkTableIsEmpty();
@@ -92,5 +97,28 @@ public class SpendingTest extends BaseWebTest {
         spendRepository.createSpend(spendEntity);
     }
 
+
+    @GenerateSpendRest(
+            username = "duck",
+            description = "QA.GURU Advanced 4",
+            amount = 72500,
+            category = "Обучение",
+            currency = CurrencyValues.RUB
+    )
+    @Test
+    @DisplayName("Homework_12")
+    void spendingShouldBeDeletedByButtonDeleteSpendingHomeWork(SpendJson spend) {
+
+        Selenide.open("http://127.0.0.1:3000/main", WelcomePage.class)
+                .clickLoginButton()
+                .login(USERNAME, PASSWORD);
+
+        mainPage
+                .getSpendingTable()
+                .checkTableContains(spend)
+                .selectSpendingByDescription(spend.description())
+                .clickDeleteSelectedButton()
+                .checkTableIsEmpty();
+    }
 }
 
