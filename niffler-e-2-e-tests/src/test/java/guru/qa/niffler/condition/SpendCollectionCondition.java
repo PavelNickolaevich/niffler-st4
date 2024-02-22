@@ -12,8 +12,12 @@ import org.openqa.selenium.WebElement;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class SpendCollectionCondition {
@@ -21,46 +25,41 @@ public class SpendCollectionCondition {
     public static CollectionCondition spends(SpendJson... expectedSPends) {
         return new CollectionCondition() {
 
-            private List<String> expectedList;
+            private List<String> expectedList = new ArrayList<>();
 
             @Nonnull
             @Override
             public CheckResult check(Driver driver, List<WebElement> elements) {
-                expectedList = new ArrayList<>();
+
                 List<String> actualList = new ArrayList<>();
 
                 if (elements.size() != expectedSPends.length) {
                     return CheckResult.rejected("Incorrect table size", elements);
                 }
+                List<String> expectedList = new ArrayList<>();
 
                 for (WebElement element : elements) {
 
-                    List<WebElement> tds = element.findElements(By.cssSelector("td"));
-                    boolean checkPassed = false;
+                    List<String> tds = element.findElements(By.cssSelector("td")).stream()
+                            .map(el -> el.getText())
+                            .filter(value -> !value.equals(""))
+                            .collect(Collectors.toList());
 
-                    actualList.add(tds.get(2).getText());
-                    actualList.add(tds.get(3).getText());
-                    actualList.add(tds.get(4).getText());
-                    actualList.add(tds.get(5).getText());
-
+                    actualList.addAll(tds);
+                }
 
                     for (SpendJson expectedSPend : expectedSPends) {
 
-                        expectedList.add(String.valueOf(expectedSPend.amount()));
+                        expectedList.add(new SimpleDateFormat("dd MMM yy", Locale.ENGLISH).format(expectedSPend.spendDate()));
+                        expectedList.add(String.valueOf(expectedSPend.amount().intValue()));
                         expectedList.add(expectedSPend.currency().name());
                         expectedList.add(expectedSPend.category());
                         expectedList.add(expectedSPend.description());
-
-                        checkPassed = expectedList.equals(actualList);
-                        if (checkPassed) {
-                            break;
-                        }
                     }
 
-                    if (checkPassed) {
+                    if (actualList.equals(expectedList)) {
                         return CheckResult.accepted();
                     }
-                }
                 return CheckResult.rejected("Incorrect spends content", actualList);
             }
 
@@ -73,7 +72,7 @@ public class SpendCollectionCondition {
                 List<String> wrongResults = expectedList.stream().filter(i -> !actualData.contains(i))
                         .collect(Collectors.toList());
 
-                throw new ElementWithTextNotFound(collection, wrongResults, lastCheckResult.getActualValue(), explanation, timeoutMs, cause);
+                throw new ElementWithTextNotFound(collection, wrongResults , lastCheckResult.getActualValue(), explanation, timeoutMs, cause);
 
             }
 

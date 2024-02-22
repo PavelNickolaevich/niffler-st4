@@ -10,7 +10,6 @@ import guru.qa.niffler.jupiter.annotations.GenerateCategory;
 import guru.qa.niffler.jupiter.annotations.GenerateSpendDB;
 import guru.qa.niffler.jupiter.annotations.GenerateSpendRest;
 import guru.qa.niffler.model.SpendJson;
-import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.pageobject.WelcomePage;
 import guru.qa.niffler.test.BaseWebTest;
 import org.junit.jupiter.api.DisplayName;
@@ -101,9 +100,10 @@ public class SpendingTest extends BaseWebTest {
     @GenerateSpendRest(
             username = "duck",
             description = "QA.GURU Advanced 4",
-            amount = 72500,
+            amount = 725,
             category = "Обучение",
             currency = CurrencyValues.RUB
+         //   spendDate = "25 FEB 24"
     )
     @Test
     @DisplayName("Homework_12")
