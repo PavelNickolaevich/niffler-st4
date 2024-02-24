@@ -36,7 +36,6 @@ public class SpendCollectionCondition {
                 if (elements.size() != expectedSPends.length) {
                     return CheckResult.rejected("Incorrect table size", elements);
                 }
-                List<String> expectedList = new ArrayList<>();
 
                 for (WebElement element : elements) {
 
