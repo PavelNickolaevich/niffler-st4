@@ -5,6 +5,10 @@ import guru.qa.niffler.db.model.CurrencyValues;
 import guru.qa.niffler.page.BasePage;
 import io.qameta.allure.Step;
 
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 
 public class ProfilePage extends BasePage<ProfilePage> {
@@ -52,5 +56,14 @@ public class ProfilePage extends BasePage<ProfilePage> {
         return this;
     }
 
+    public void checkCurrentCurrencyDisplay(CurrencyValues currencyValue) {
+        $(byText(currencyValue.name())).shouldBe(visible);
 
+    }
+
+
+    @Override
+    public ProfilePage waitForPageLoaded() {
+        return null;
+    }
 }

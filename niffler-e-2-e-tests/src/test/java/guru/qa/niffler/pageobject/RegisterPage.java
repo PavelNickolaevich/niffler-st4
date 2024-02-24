@@ -4,6 +4,7 @@ import com.codeborne.selenide.SelenideElement;
 import guru.qa.niffler.page.BasePage;
 import io.qameta.allure.Step;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static org.openqa.selenium.By.xpath;
@@ -13,8 +14,9 @@ public class RegisterPage extends BasePage<RegisterPage> {
     private final SelenideElement usernameInput = $("#username");
     private final SelenideElement passwordInput = $("#password");
     private final SelenideElement submitPasswordInput = $("#passwordSubmit");
-    private final SelenideElement signUpBtn = $(xpath("//button[@type='submit'"));
+    private final SelenideElement signUpBtn = $(xpath("//button[@type='submit']"));
     private final SelenideElement signUInBtn = $(byText("Sign in!"));
+
 
 
     @Step("Установить пользователя: {userName}")
@@ -47,4 +49,16 @@ public class RegisterPage extends BasePage<RegisterPage> {
         return this;
     }
 
+    public void checkErrorMessageUsernameDisplay(String message, String username) {
+        $(byText(String.format(message,username))).shouldBe(visible);
+    }
+
+    public void checkErrorMessage(String message) {
+        $(byText(message)).shouldBe(visible);
+    }
+
+    @Override
+    public RegisterPage waitForPageLoaded() {
+        return null;
+    }
 }

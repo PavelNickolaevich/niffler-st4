@@ -2,18 +2,18 @@ package guru.qa.niffler.pageobject;
 
 import com.codeborne.selenide.SelenideElement;
 import guru.qa.niffler.page.BasePage;
+import guru.qa.niffler.pageobject.fragment.SpendingTable;
 import io.qameta.allure.Step;
 
-import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 
 public class MainPage extends BasePage<MainPage> {
 
+    protected final SpendingTable spendingTable = new SpendingTable();
+
     private final SelenideElement historyOfSpendingsTable = $(".spendings-table tbody");
-    private final SelenideElement deleteSelectedBtn = $(byText("Delete selected"));
     private final SelenideElement chooseSpendingCategory = $x("//div[contains(text(),'Choose spending category')]");
     private final SelenideElement nameCategory = $x("//div[contains(@id,'listbox')]");
     private final SelenideElement setAmount = $x("//input[@name='amount']");
@@ -25,6 +25,11 @@ public class MainPage extends BasePage<MainPage> {
     private final SelenideElement lastMonthBtn = $x("//button[contains(text(),'Last month')]");
     private final SelenideElement allTimeBtn = $x("//button[contains(text(),'All time')]");
 
+
+    public SpendingTable getSpendingTable() {
+        spendingTable.getSelf().scrollIntoView(true);
+        return spendingTable;
+    }
 
     @Step("Установить категорию : {categoryName}")
     public MainPage setCategoryName(String categoryName) {
@@ -58,29 +63,23 @@ public class MainPage extends BasePage<MainPage> {
         return this;
     }
 
-    @Step("Выбрать spend с описанием : {description}")
-    public MainPage selectSpendingByDescription(String description) {
-        historyOfSpendingsTable
-                .$$("tr")
-                .find(text(description))
-                .$("td")
-                .scrollIntoView(true)
-                .click();
-        return this;
-    }
+//    @Step("Выбрать spend с описанием : {description}")
+//    public MainPage selectSpendingByDescription(String description) {
+//        historyOfSpendingsTable
+//                .$$("tr")
+//                .find(text(description))
+//                .$("td")
+//                .scrollIntoView(true)
+//                .click();
+//        return this;
+//    }
 
-    @Step("Нажать кнопку \"Delete selected\"")
-    public MainPage clickDeleteSelectedButton() {
-        deleteSelectedBtn.click();
-        return this;
-    }
-
-    @Step("Проверить, что таблица \"History of Spendings\"")
-    public void checkTableIsEmpty() {
-        historyOfSpendingsTable
-                .$$("tr")
-                .shouldHave(size(0));
-    }
+//    @Step("Проверить, что таблица \"History of Spendings\"")
+//    public void checkTableIsEmpty() {
+//        historyOfSpendingsTable
+//                .$$("tr")
+//                .shouldHave(size(0));
+//    }
 
 
     @Step("Нажать на фильтр \"Today\"")
@@ -103,4 +102,8 @@ public class MainPage extends BasePage<MainPage> {
         allTimeBtn.click();
     }
 
+    @Override
+    public MainPage waitForPageLoaded() {
+        return null;
+    }
 }

@@ -27,4 +27,14 @@ public class LocalConfig implements Config {
   public String jdbcHost() {
     return "localhost";
   }
+
+  @Override
+  public String categoryUrl() {
+    return "http://127.0.0.1:8093";
+  }
+
+  @Override
+  public String spendUrl() {
+    return "http://127.0.0.1:8093";
+  }
 }

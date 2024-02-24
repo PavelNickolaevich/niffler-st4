@@ -1,4 +1,4 @@
-package guru.qa.niffler.test;
+package guru.qa.niffler.test_hw;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotations.User;
@@ -18,21 +18,6 @@ public class FriendsTest extends BaseWebTest {
     void doLogin(@User(WITH_FRIENDS) UserJson user) {
         Selenide.open("http://127.0.0.1:3000/main", WelcomePage.class)
                 .clickLoginButton();
-    }
-
-    @Test
-    void friendsTableShouldNotBeEmpty0(@User(WITH_FRIENDS) UserJson user) throws Exception {
-        Thread.sleep(3000);
-    }
-
-    @Test
-    void friendsTableShouldNotBeEmpty1(@User(WITH_FRIENDS) UserJson user) throws Exception {
-        Thread.sleep(3000);
-    }
-
-    @Test
-    void friendsTableShouldNotBeEmpty2(@User(WITH_FRIENDS) UserJson user) throws Exception {
-        Thread.sleep(3000);
     }
 
     @Test
@@ -80,5 +65,26 @@ public class FriendsTest extends BaseWebTest {
                 .isDisplayedActionsSubmitBtn("duck")
                 .isDisplayedDeclineBtn("duck");
 
+    }
+
+
+    @Test
+    void checkUserReceivedFriendRequestWithTwoParams(@User(INVITATION_RECEIVED) UserJson user, @User(INVITATION_SEND) UserJson userRec) {
+
+        loginPage
+                .login(user.username(), user.testData().password());
+
+        loginUser(user.username(), user.testData().password());
+
+        headerFragment.
+                clickFriendsBtn();
+        friendsPage
+                .isDisplayedActionsSubmitBtn(userRec.username());
+    }
+
+    private void loginUser(String username, String password) {
+        Selenide.open(BASE_URL, WelcomePage.class)
+                .clickLoginButton()
+                .login(username, password);
     }
 }
