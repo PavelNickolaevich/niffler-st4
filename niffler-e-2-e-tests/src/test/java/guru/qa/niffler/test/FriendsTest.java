@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static guru.qa.niffler.jupiter.annotations.User.UserType.*;
 
 @ExtendWith(UsersQueueExtension.class)
+@ExtendWith({ContextHolderExtension.class, ApiLoginExtension.class, UsersQueueExtension.class})
 public class FriendsTest extends BaseWebTest {
 
     @BeforeEach
@@ -20,10 +21,12 @@ public class FriendsTest extends BaseWebTest {
                 .clickLoginButton();
     }
 
-    @Test
-    void friendsTableShouldNotBeEmpty0(@User(WITH_FRIENDS) UserJson user) throws Exception {
-        Thread.sleep(3000);
-    }
+  @Test
+  @ApiLogin(username = "duck", password = "12345")
+  void friendsTableShouldNotBeEmpty0(@User(WITH_FRIENDS) UserJson user) throws Exception {
+    Selenide.open(FriendsPage.URL);
+    System.out.println("");
+  }
 
     @Test
     void friendsTableShouldNotBeEmpty1(@User(WITH_FRIENDS) UserJson user) throws Exception {
