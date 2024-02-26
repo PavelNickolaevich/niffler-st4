@@ -28,4 +28,14 @@ public class DockerConfig implements Config {
   public String jdbcHost() {
     return "niffler-all-db";
   }
+
+  @Override
+  public String categoryUrl() {
+    return null;
+  }
+
+  @Override
+  public String spendUrl() {
+    return null;
+  }
 }
