@@ -11,6 +11,7 @@ import static com.codeborne.selenide.Selenide.$x;
 
 public class MainPage extends BasePage<MainPage> {
 
+    public static final String URL = CFG.frontUrl() + "/main";
     protected final SpendingTable spendingTable = new SpendingTable();
 
     private final SelenideElement historyOfSpendingsTable = $(".spendings-table tbody");

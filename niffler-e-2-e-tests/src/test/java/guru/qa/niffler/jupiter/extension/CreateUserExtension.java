@@ -45,26 +45,46 @@ public class CreateUserExtension implements BeforeEachCallback, AfterTestExecuti
           ? "12345"
           : dbUser.password();
 
-      UserAuthEntity userAuth = new UserAuthEntity();
-      userAuth.setUsername(username);
-      userAuth.setPassword(password);
-      userAuth.setEnabled(true);
-      userAuth.setAccountNonExpired(true);
-      userAuth.setAccountNonLocked(true);
-      userAuth.setCredentialsNonExpired(true);
-      AuthorityEntity[] authorities = Arrays.stream(Authority.values()).map(
-          a -> {
-            AuthorityEntity ae = new AuthorityEntity();
-            ae.setAuthority(a);
-            return ae;
-          }
-      ).toArray(AuthorityEntity[]::new);
+      UserAuthEntity userAuth = UserAuthEntity.builder()
+              .username(username)
+              .password(password)
+              .enabled(true)
+              .accountNonExpired(true)
+              .accountNonLocked(true)
+              .credentialsNonExpired(true)
+              .authorities(Arrays.stream(Authority.values())
+                      .map(e -> {
+                        AuthorityEntity ae = new AuthorityEntity();
+                        ae.setAuthority(e);
+                        return ae;
+                      }).toList()).build();
 
-      userAuth.addAuthorities(authorities);
+      UserEntity user = UserEntity.builder()
+              .username(username)
+              .currency(CurrencyValues.RUB)
+              .build();
 
-      UserEntity user = new UserEntity();
-      user.setUsername(username);
-      user.setCurrency(CurrencyValues.RUB);
+
+//      UserAuthEntity userAuth = new UserAuthEntity();
+//      userAuth.setUsername(username);
+//      userAuth.setPassword(password);
+//      userAuth.setEnabled(true);
+//      userAuth.setAccountNonExpired(true);
+//      userAuth.setAccountNonLocked(true);
+//      userAuth.setCredentialsNonExpired(true);
+//      AuthorityEntity[] authorities = Arrays.stream(Authority.values()).map(
+//          a -> {
+//            AuthorityEntity ae = new AuthorityEntity();
+//            ae.setAuthority(a);
+//            return ae;
+//          }
+//      ).toArray(AuthorityEntity[]::new);
+
+     // userAuth.addAuthorities(authorities);
+
+//      UserEntity user = new UserEntity();
+//      user.setUsername(username);
+//      user.setCurrency(CurrencyValues.RUB);
 
       userRepository.createInAuth(userAuth);
       userRepository.createInUserdata(user);

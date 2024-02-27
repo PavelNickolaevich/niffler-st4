@@ -5,6 +5,7 @@ import guru.qa.niffler.db.logging.JsonAllureAppender;
 import guru.qa.niffler.db.model.*;
 import guru.qa.niffler.db.repository.UserRepository;
 import guru.qa.niffler.db.repository.UserRepositoryJdbc;
+import guru.qa.niffler.jupiter.annotations.ApiLogin;
 import guru.qa.niffler.jupiter.annotations.DbUser;
 import org.junit.jupiter.api.extension.*;
 import org.junit.platform.commons.support.AnnotationSupport;
@@ -30,9 +31,20 @@ public class DbUserExtension implements BeforeEachCallback, ParameterResolver, A
                 DbUser.class
         );
 
+        Optional<ApiLogin> apiLogin = AnnotationSupport.findAnnotation(
+                extensionContext.getRequiredTestMethod(),
+                ApiLogin.class
+        );
+
         Map<String, Object> userData = new HashMap<>();
-        if (dbUser.isPresent()) {
-            DbUser dbUserData = dbUser.get();
+        if (dbUser.isPresent() || apiLogin.isPresent()) {
+            DbUser dbUserData = null;
+            if (dbUser.isPresent()) {
+                dbUserData = dbUser.get();
+            }
+            if(apiLogin.isPresent()) {
+                dbUserData = apiLogin.get().user();
+            }
             String userName = dbUserData.username();
             String password = dbUserData.password();
             if (userName.isEmpty() && password.isEmpty()) {

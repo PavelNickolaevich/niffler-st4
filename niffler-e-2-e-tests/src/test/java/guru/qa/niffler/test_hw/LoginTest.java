@@ -1,26 +1,32 @@
 package guru.qa.niffler.test_hw;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.db.model.*;
 import guru.qa.niffler.db.repository.UserRepository;
+import guru.qa.niffler.jupiter.DbUserExtension;
+import guru.qa.niffler.jupiter.annotations.ApiLogin;
 import guru.qa.niffler.jupiter.annotations.DbUser;
+import guru.qa.niffler.jupiter.annotations.GenerateSpendRest;
+import guru.qa.niffler.jupiter.extension.ApiLoginExtension;
+import guru.qa.niffler.jupiter.extension.ContextHolderExtension;
 import guru.qa.niffler.jupiter.extension.UserRepositoryExtension;
-import guru.qa.niffler.page.WelcomePage;
+import guru.qa.niffler.model.SpendJson;
+import guru.qa.niffler.page.message.SuccessMsg;
 import guru.qa.niffler.pageobject.MainPage;
 import guru.qa.niffler.test.BaseWebTest;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 @ExtendWith(UserRepositoryExtension.class)
+@ExtendWith({ContextHolderExtension.class, DbUserExtension.class, ApiLoginExtension.class})
 public class LoginTest extends BaseWebTest {
 
     private UserRepository userRepository;
@@ -28,12 +34,12 @@ public class LoginTest extends BaseWebTest {
     private Authority userAuth;
 
 
-    @BeforeEach
-    void doLogin() {
-        Selenide.open("http://127.0.0.1:3000/main");
-        welcomePage.clickLoginButton();
-
-    }
+//    @BeforeEach
+//    void doLogin() {
+//        Selenide.open("http://127.0.0.1:3000/main");
+//        welcomePage.clickLoginButton();
+//
+//    }
 
     @DbUser()
     @Test
@@ -152,5 +158,21 @@ public class LoginTest extends BaseWebTest {
 
         userRepository.deleteInAuthById(userGork.getId());
 
+    }
+
+
+
+    @ApiLogin(user = @DbUser)
+    @Test
+    @DisplayName("HomeWork 14")
+    void loginDbUserWithApi() throws InterruptedException {
+
+        Selenide.open("http://127.0.0.1:3000/main", MainPage.class)
+                .clickProfileBtn();
+
+        profilePage
+                .setName("Один")
+                .submitProfile()
+                .checkToasterMessage(SuccessMsg.PROFILE_UPDATED);
     }
 }
