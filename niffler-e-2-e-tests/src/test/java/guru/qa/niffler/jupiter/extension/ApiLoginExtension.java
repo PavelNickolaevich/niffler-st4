@@ -8,7 +8,7 @@ import guru.qa.niffler.api.cookie.ThreadSafeCookieManager;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.db.model.UserAuthEntity;
 import guru.qa.niffler.jupiter.DbUserExtension;
-import guru.qa.niffler.jupiter.annotations.ApiLogin;
+import guru.qa.niffler.jupiter.annotations.MyApiLogin;
 import guru.qa.niffler.utils.OauthUtils;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
@@ -16,7 +16,6 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.platform.commons.support.AnnotationSupport;
 import org.openqa.selenium.Cookie;
 
-import java.sql.Struct;
 import java.util.Map;
 
 public class ApiLoginExtension implements BeforeEachCallback, AfterTestExecutionCallback {
@@ -29,9 +28,9 @@ public class ApiLoginExtension implements BeforeEachCallback, AfterTestExecution
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
-        ApiLogin apiLogin = AnnotationSupport.findAnnotation(
+        MyApiLogin apiLogin = AnnotationSupport.findAnnotation(
                 extensionContext.getRequiredTestMethod(),
-                guru.qa.niffler.jupiter.annotations.ApiLogin.class
+                MyApiLogin.class
         ).orElse(null);
 
         if (apiLogin != null) {
@@ -40,15 +39,20 @@ public class ApiLoginExtension implements BeforeEachCallback, AfterTestExecution
             setCodeVerifier(extensionContext, codeVerifier);
             setCodChallenge(extensionContext, codeChallenge);
             boolean isEmpty = false;
-            if (apiLogin.username().isEmpty() && apiLogin.password().isEmpty()) {
+            String userName = "";
+            String password = "";
+            if (apiLogin.user().handle()) {
                 var userAuthMap = extensionContext.getStore(DbUserExtension.NAMESPACE).get(extensionContext.getUniqueId(), Map.class);
                 UserAuthEntity authEntity = (UserAuthEntity) userAuthMap.get("userAuth");
-                authApiClient.doLogin(extensionContext, authEntity.getUsername(), authEntity.getPassword());
+                userName = authEntity.getUsername();
+                password = authEntity.getPassword();
                 isEmpty = true;
             }
-            if(!isEmpty) {
-                authApiClient.doLogin(extensionContext, apiLogin.username(), apiLogin.password());
+            if (!isEmpty) {
+                userName = apiLogin.username();
+                password = apiLogin.password();
             }
+            authApiClient.doLogin(extensionContext, userName, password);
             Selenide.open(CFG.frontUrl());
             SessionStorage sessionStorage = Selenide.sessionStorage();
             sessionStorage.setItem(

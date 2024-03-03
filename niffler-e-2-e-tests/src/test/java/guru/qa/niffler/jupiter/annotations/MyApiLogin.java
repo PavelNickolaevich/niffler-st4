@@ -7,10 +7,10 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface ApiLogin {
+public @interface MyApiLogin {
   String username() default "";
 
   String password() default "";
 
-  DbUser user();
+  DbUser user() default @DbUser(handle = false);
 }

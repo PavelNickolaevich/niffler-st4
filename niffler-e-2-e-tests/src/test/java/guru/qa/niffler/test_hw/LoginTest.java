@@ -4,13 +4,11 @@ import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.db.model.*;
 import guru.qa.niffler.db.repository.UserRepository;
 import guru.qa.niffler.jupiter.DbUserExtension;
-import guru.qa.niffler.jupiter.annotations.ApiLogin;
+import guru.qa.niffler.jupiter.annotations.MyApiLogin;
 import guru.qa.niffler.jupiter.annotations.DbUser;
-import guru.qa.niffler.jupiter.annotations.GenerateSpendRest;
 import guru.qa.niffler.jupiter.extension.ApiLoginExtension;
 import guru.qa.niffler.jupiter.extension.ContextHolderExtension;
 import guru.qa.niffler.jupiter.extension.UserRepositoryExtension;
-import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.page.message.SuccessMsg;
 import guru.qa.niffler.pageobject.MainPage;
 import guru.qa.niffler.test.BaseWebTest;
@@ -162,10 +160,25 @@ public class LoginTest extends BaseWebTest {
 
 
 
-    @ApiLogin(user = @DbUser)
+    @MyApiLogin(user = @DbUser())
     @Test
     @DisplayName("HomeWork 14")
     void loginDbUserWithApi() throws InterruptedException {
+
+        Selenide.open("http://127.0.0.1:3000/main", MainPage.class)
+                .clickProfileBtn();
+
+        profilePage
+                .setName("Один")
+                .submitProfile()
+                .checkToasterMessage(SuccessMsg.PROFILE_UPDATED);
+    }
+
+
+    @MyApiLogin(username = "12345", password = "12345", user = @DbUser(handle = false))
+    @Test
+    @DisplayName("HomeWork 14")
+    void loginDbUserWithApiAndHandle() throws InterruptedException {
 
         Selenide.open("http://127.0.0.1:3000/main", MainPage.class)
                 .clickProfileBtn();

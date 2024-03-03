@@ -18,4 +18,6 @@ public @interface DbUser {
 
     String password() default "";
 
+    boolean handle() default true;
+
 }
