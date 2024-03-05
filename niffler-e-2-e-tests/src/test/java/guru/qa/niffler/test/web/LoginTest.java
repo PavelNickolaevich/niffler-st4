@@ -75,29 +75,28 @@ public class LoginTest extends BaseWebTest {
                 .build();
 
 
-        AuthorityEntity[] authorities = Arrays.stream(Authority.values()).map(
-                a -> {
-                    AuthorityEntity ae = new AuthorityEntity();
-                    ae.setAuthority(a);
-                    return ae;
-                }
-        ).toArray(AuthorityEntity[]::new);
+    AuthorityEntity[] authorities = Arrays.stream(Authority.values()).map(
+        a -> {
+          AuthorityEntity ae = new AuthorityEntity();
+          ae.setAuthority(a);
+          return ae;
+        }
+    ).toArray(AuthorityEntity[]::new);
 
-        userAuth.addAuthorities(authorities);
+    userAuth.addAuthorities(authorities);
 
-        userEntity = UserEntity.builder()
-                .username("valentin_10")
-                .currency(CurrencyValues.RUB)
-                .build();
-        userRepository.createInAuth(userAuth);
-        userRepository.createInUserdata(userEntity);
-    }
+//    user = new UserEntity();
+//    user.setUsername("valentin_7");
+//    user.setCurrency(CurrencyValues.RUB);
+    userRepository.createInAuth(userAuth);
+//    userRepository.createInUserdata(user);
+  }
 
-    @AfterEach
-    void removeUser() {
-        userRepository.deleteInAuthById(userAuth.getId());
-        userRepository.deleteInUserdataById(userEntity.getId());
-    }
+//  @AfterEach
+//  void removeUser() {
+//    userRepository.deleteInAuthById(userAuth.getId());
+//    userRepository.deleteInUserdataById(user.getId());
+//  }
 
     @DbUser()
     @Test

@@ -3,7 +3,7 @@ package guru.qa.niffler.test;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.db.model.*;
 import guru.qa.niffler.db.repository.UserRepository;
-import guru.qa.niffler.jupiter.annotation.DbUser;
+import guru.qa.niffler.jupiter.annotations.DbUser;
 import guru.qa.niffler.jupiter.extension.UserRepositoryExtension;
 import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.page.WelcomePage;

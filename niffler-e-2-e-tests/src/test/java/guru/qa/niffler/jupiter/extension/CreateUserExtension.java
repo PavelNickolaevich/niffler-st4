@@ -3,7 +3,7 @@ package guru.qa.niffler.jupiter.extension;
 import guru.qa.niffler.db.model.*;
 import guru.qa.niffler.db.repository.UserRepository;
 import guru.qa.niffler.db.repository.UserRepositoryHibernate;
-import guru.qa.niffler.jupiter.annotation.DbUser;
+import guru.qa.niffler.jupiter.annotations.DbUser;
 import guru.qa.niffler.jupiter.annotations.MyApiLogin;
 import guru.qa.niffler.utils.DataUtils;
 import org.junit.jupiter.api.extension.*;
