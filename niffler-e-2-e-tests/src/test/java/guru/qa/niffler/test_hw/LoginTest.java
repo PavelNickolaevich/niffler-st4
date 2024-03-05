@@ -175,7 +175,7 @@ public class LoginTest extends BaseWebTest {
     }
 
 
-    @MyApiLogin(username = "12345", password = "12345", user = @DbUser(handle = false))
+    @MyApiLogin(username = "12345", password = "12345", user = @DbUser())
     @Test
     @DisplayName("HomeWork 14")
     void loginDbUserWithApiAndHandle() throws InterruptedException {
