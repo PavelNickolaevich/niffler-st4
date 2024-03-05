@@ -19,6 +19,8 @@ public interface Config {
   String spendUrl();
 
 
+  String currencyGrpcHost();
+
   default String jdbcUser() {
     return "postgres";
   }

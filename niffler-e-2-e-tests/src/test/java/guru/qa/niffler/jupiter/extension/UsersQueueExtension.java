@@ -79,6 +79,7 @@ public class UsersQueueExtension implements BeforeEachCallback, AfterTestExecuti
             context.getStore(NAMESPACE).put(context.getUniqueId(), testCandidates);
         }
     }
+  }
 
     @Override
     public void afterTestExecution(ExtensionContext context) throws Exception {

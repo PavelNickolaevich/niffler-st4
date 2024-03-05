@@ -38,4 +38,9 @@ public class DockerConfig implements Config {
   public String spendUrl() {
     return null;
   }
+
+  @Override
+  public String currencyGrpcHost() {
+    return "currency.niffler.dc";
+  }
 }
