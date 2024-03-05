@@ -14,6 +14,10 @@ public interface Config {
 
   String jdbcHost();
 
+  String categoryUrl();
+
+  String spendUrl();
+
   String currencyGrpcHost();
 
   default String jdbcUser() {
@@ -21,14 +25,10 @@ public interface Config {
   }
 
   default String jdbcPassword() {
-    return "secret";
+    return "root";
   }
 
   default int jdbcPort() {
     return 5432;
-  }
-
-  default int currencyGrpcPort() {
-    return 8092;
   }
 }

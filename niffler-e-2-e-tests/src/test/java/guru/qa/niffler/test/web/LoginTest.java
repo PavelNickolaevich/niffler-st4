@@ -1,16 +1,12 @@
-package guru.qa.niffler.test.web;
+package guru.qa.niffler.test;
 
 import com.codeborne.selenide.Selenide;
-import guru.qa.niffler.db.model.Authority;
-import guru.qa.niffler.db.model.AuthorityEntity;
-import guru.qa.niffler.db.model.CurrencyValues;
-import guru.qa.niffler.db.model.UserAuthEntity;
-import guru.qa.niffler.db.model.UserEntity;
+import guru.qa.niffler.db.model.*;
 import guru.qa.niffler.db.repository.UserRepository;
-import guru.qa.niffler.jupiter.annotation.TestUser;
+import guru.qa.niffler.jupiter.annotations.DbUser;
 import guru.qa.niffler.jupiter.extension.UserRepositoryExtension;
-import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.page.WelcomePage;
+import guru.qa.niffler.pageobject.MainPage;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,24 +14,66 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Arrays;
 
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
+
 @ExtendWith(UserRepositoryExtension.class)
 public class LoginTest extends BaseWebTest {
 
-  private UserRepository userRepository;
+    private UserRepository userRepository;
+    private UserEntity userEntity;
+    private UserAuthEntity userAuth;
 
-  private UserAuthEntity userAuth;
-  private UserEntity user;
+
+    @BeforeEach
+    void doLogin() {
+        Selenide.open("http://127.0.0.1:3000/main");
+        welcomePage.clickLoginButton();
+
+    }
+
+    @DbUser()
+    @Test
+    void inputIncorrectPassword(UserAuthEntity userAuth) {
+        loginPage
+                .loginWithWrongPassword(userAuth.getUsername(), "wrong")
+                .checkErrorMessageDisplay("Неверные учетные данные пользователя");
+
+    }
+
+    @DbUser()
+    @Test
+    void inputIncorrectUserName(UserAuthEntity userAuth) {
+        loginPage
+                .loginWithWrongPassword("wrong", userAuth.getPassword())
+                .checkErrorMessageDisplay("Неверные учетные данные пользователя");
+    }
+
+    @DbUser(username = "",
+            password = "")
+    @Test
+    void statisticShouldBeVisibleAfterLogin(UserAuthEntity userAuth) {
+        Selenide.open("http://127.0.0.1:3000/main");
+        $("a[href*='redirect']").click();
+        $("input[name='username']").setValue(userAuth.getUsername());
+        $("input[name='password']").setValue(userAuth.getPassword());
+        $("button[type='submit']").click();
+        $(".main-content__section-stats").should(visible);
+    }
 
 
-  @BeforeEach
-  void createUser() {
-    userAuth = new UserAuthEntity();
-    userAuth.setUsername("valentin_7");
-    userAuth.setPassword("12345");
-    userAuth.setEnabled(true);
-    userAuth.setAccountNonExpired(true);
-    userAuth.setAccountNonLocked(true);
-    userAuth.setCredentialsNonExpired(true);
+    @BeforeEach
+    void createUser() {
+
+        userAuth = UserAuthEntity.builder()
+                .username("valentin_7")
+                .password("12345")
+                .enabled(true)
+                .accountNonExpired(true)
+                .accountNonLocked(true)
+                .credentialsNonExpired(true)
+                .build();
+
 
     AuthorityEntity[] authorities = Arrays.stream(Authority.values()).map(
         a -> {
@@ -47,28 +85,28 @@ public class LoginTest extends BaseWebTest {
 
     userAuth.addAuthorities(authorities);
 
-    user = new UserEntity();
-    user.setUsername("valentin_7");
-    user.setCurrency(CurrencyValues.RUB);
+//    user = new UserEntity();
+//    user.setUsername("valentin_7");
+//    user.setCurrency(CurrencyValues.RUB);
     userRepository.createInAuth(userAuth);
-    userRepository.createInUserdata(user);
+//    userRepository.createInUserdata(user);
   }
 
-  @AfterEach
-  void removeUser() {
-    userRepository.deleteInAuthById(userAuth.getId());
-    userRepository.deleteInUserdataById(user.getId());
-  }
+//  @AfterEach
+//  void removeUser() {
+//    userRepository.deleteInAuthById(userAuth.getId());
+//    userRepository.deleteInUserdataById(user.getId());
+//  }
 
-  @TestUser()
-  @Test
-  void statisticShouldBeVisibleAfterLogin() {
-    Selenide.open(WelcomePage.URL, WelcomePage.class)
-        .doLogin()
-        .fillLoginPage(userAuth.getUsername(), userAuth.getPassword())
-        .submit();
+    @DbUser()
+    @Test
+    void statisticShouldBeVisibleAfterLogin() {
+        Selenide.open(WelcomePage.URL, WelcomePage.class)
+                .doLogin()
+                .fillLoginPage(userAuth.getUsername(), userAuth.getPassword())
+                .submit();
 
-    new MainPage()
-        .waitForPageLoaded();
-  }
+        new MainPage()
+                .waitForPageLoaded();
+    }
 }

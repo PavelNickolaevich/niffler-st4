@@ -1,6 +1,6 @@
 package guru.qa.niffler.test.web;
 
-import guru.qa.niffler.jupiter.annotation.AllureIdParam;
+import guru.qa.niffler.jupiter.annotations.AllureIdParam;
 import guru.qa.niffler.jupiter.converter.SpendJsonConverter;
 import guru.qa.niffler.model.SpendJson;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,14 +19,13 @@ public class ParametrizedTestExample {
   @ParameterizedTest
   void paramTest(@AllureIdParam String allureId, String name) {
 
-  }
+    }
 
-
-  @ValueSource(strings = {
-      "rest/spend0.json", "rest/spend1.json"
-  })
-  @ParameterizedTest
-  void spendRestTest(@ConvertWith(SpendJsonConverter.class) SpendJson spend) {
-    System.out.println();
-  }
+    @ValueSource(strings = {
+            "rest/spend0.json", "rest/spend1.json"
+    })
+    @ParameterizedTest
+    void spendRestTest(@ConvertWith(SpendJsonConverter.class) SpendJson spend) {
+        System.out.println();
+    }
 }
