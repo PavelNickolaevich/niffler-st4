@@ -3,6 +3,9 @@ server:
   error:
     include:
       message: true
+grpc:
+  server:
+    port: 8095
 
 spring:
   application:
@@ -58,7 +61,7 @@ spring:
   datasource:
     url: 'jdbc:postgresql://localhost:5432/niffler-spend'
     username: postgres
-    password: secret
+    password: root
 grpc:
   client:
     grpcCurrencyClient:
