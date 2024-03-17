@@ -18,7 +18,7 @@ public abstract class BaseGrpcTest {
   protected static NifflerCurrencyServiceGrpc.NifflerCurrencyServiceStub stub;
 
   static {
-    channel = ManagedChannelBuilder.forAddress(CFG.currencyGrpcHost(), Integer.parseInt(CFG.currencyGrpcHost()))
+    channel = ManagedChannelBuilder.forAddress(CFG.currencyGrpcHost(), CFG.currencyGrpcPort())
         .intercept(new AllureGrpc(), new GrpcConsoleInterceptor())
         .usePlaintext()
         .build();
