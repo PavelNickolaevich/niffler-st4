@@ -146,7 +146,7 @@ public class GrpcSpendService extends NifflerSpendServiceGrpc.NifflerSpendServic
         }
     }
 
-    @Override
+    //@Override
     @Transactional
     public void deleteSpend(DeleteSpendRequest request, StreamObserver<Empty> responseObserver) {
         spendRepository.deleteByUsernameAndIdIn(request.getUsername(), request.getIdsList().stream().map(UUID::fromString).toList());

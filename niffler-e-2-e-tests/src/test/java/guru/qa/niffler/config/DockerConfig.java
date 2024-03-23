@@ -35,6 +35,11 @@ public class DockerConfig implements Config {
   }
 
   @Override
+  public String userUrl() {
+    return null;
+  }
+
+  @Override
   public String spendUrl() {
     return null;
   }

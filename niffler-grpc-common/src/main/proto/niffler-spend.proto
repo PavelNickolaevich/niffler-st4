@@ -15,7 +15,7 @@ service NifflerSpendService {
   rpc GetStatistic (StatisticRequest) returns (StatisticResponse) {}
   rpc AddSpend (AddSpendRequest) returns (SpendJson) {}
   rpc EditSpend (EditSpendRequest) returns (SpendJson) {}
-  rpc DeleteSpend (DeleteSpendRequest) returns (google.protobuf.Empty) {}
+//  rpc DeleteSpend (DeleteSpendRequest) returns (google.protobuf.Empty) {}
 }
 
 message SpendRequest {

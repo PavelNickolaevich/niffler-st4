@@ -115,18 +115,18 @@ public class SpendGrpcTest extends BaseGrpcTest {
                 ));
     }
 
-    @Test
-    @Order(5)
-    void deleteSpendsTest() {
-
-        DeleteSpendRequest deleteSpendsRequest = DeleteSpendRequest.newBuilder()
-                .setUsername("duck")
-                .addIds(id)
-                .build();
-
-        Empty empty = blockingStub.deleteSpend(deleteSpendsRequest);
-        assertEquals(empty.getSerializedSize(), 0);
-    }
+//    @Test
+//    @Order(5)
+//    void deleteSpendsTest() {
+//
+//        DeleteSpendRequest deleteSpendsRequest = DeleteSpendRequest.newBuilder()
+//                .setUsername("duck")
+//                .addIds(id)
+//                .build();
+//
+//        Empty empty = blockingStub.deleteSpend(deleteSpendsRequest);
+//        assertEquals(empty.getSerializedSize(), 0);
+//    }
 
 
     private static com.google.type.Date convertToGoogleDate(java.util.Date date) {
