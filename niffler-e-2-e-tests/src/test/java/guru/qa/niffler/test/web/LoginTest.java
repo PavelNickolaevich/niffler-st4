@@ -1,112 +1,64 @@
-package guru.qa.niffler.test;
+package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
-import guru.qa.niffler.db.model.*;
-import guru.qa.niffler.db.repository.UserRepository;
-import guru.qa.niffler.jupiter.annotations.DbUser;
-import guru.qa.niffler.jupiter.extension.UserRepositoryExtension;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import guru.qa.niffler.jupiter.annotation.TestUser;
+import guru.qa.niffler.jupiter.annotation.User;
+import guru.qa.niffler.model.UserJson;
+import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.page.WelcomePage;
-import guru.qa.niffler.pageobject.MainPage;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.Arrays;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import static guru.qa.niffler.jupiter.annotation.User.Point.OUTER;
 
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-
-@ExtendWith(UserRepositoryExtension.class)
+//@WireMockTest(httpPort = 8089)
 public class LoginTest extends BaseWebTest {
 
-    private UserRepository userRepository;
-    private UserEntity userEntity;
-    private UserAuthEntity userAuth;
+  private static final WireMockServer wiremock = new WireMockServer(wireMockConfig()
+      .port(8089));
 
-
-    @BeforeEach
-    void doLogin() {
-        Selenide.open("http://127.0.0.1:3000/main");
-        welcomePage.clickLoginButton();
-
-    }
-
-    @DbUser()
-    @Test
-    void inputIncorrectPassword(UserAuthEntity userAuth) {
-        loginPage
-                .loginWithWrongPassword(userAuth.getUsername(), "wrong")
-                .checkErrorMessageDisplay("Неверные учетные данные пользователя");
-
-    }
-
-    @DbUser()
-    @Test
-    void inputIncorrectUserName(UserAuthEntity userAuth) {
-        loginPage
-                .loginWithWrongPassword("wrong", userAuth.getPassword())
-                .checkErrorMessageDisplay("Неверные учетные данные пользователя");
-    }
-
-    @DbUser(username = "",
-            password = "")
-    @Test
-    void statisticShouldBeVisibleAfterLogin(UserAuthEntity userAuth) {
-        Selenide.open("http://127.0.0.1:3000/main");
-        $("a[href*='redirect']").click();
-        $("input[name='username']").setValue(userAuth.getUsername());
-        $("input[name='password']").setValue(userAuth.getPassword());
-        $("button[type='submit']").click();
-        $(".main-content__section-stats").should(visible);
-    }
-
-
-    @BeforeEach
-    void createUser() {
-
-        userAuth = UserAuthEntity.builder()
-                .username("valentin_7")
-                .password("12345")
-                .enabled(true)
-                .accountNonExpired(true)
-                .accountNonLocked(true)
-                .credentialsNonExpired(true)
-                .build();
-
-
-    AuthorityEntity[] authorities = Arrays.stream(Authority.values()).map(
-        a -> {
-          AuthorityEntity ae = new AuthorityEntity();
-          ae.setAuthority(a);
-          return ae;
-        }
-    ).toArray(AuthorityEntity[]::new);
-
-    userAuth.addAuthorities(authorities);
-
-//    user = new UserEntity();
-//    user.setUsername("valentin_7");
-//    user.setCurrency(CurrencyValues.RUB);
-    userRepository.createInAuth(userAuth);
-//    userRepository.createInUserdata(user);
+  @BeforeAll
+  static void start() {
+    wiremock.start();
   }
 
-//  @AfterEach
-//  void removeUser() {
-//    userRepository.deleteInAuthById(userAuth.getId());
-//    userRepository.deleteInUserdataById(user.getId());
-//  }
+  @AfterAll
+  static void stop() {
+    wiremock.stop();
+  }
 
-    @DbUser()
-    @Test
-    void statisticShouldBeVisibleAfterLogin() {
-        Selenide.open(WelcomePage.URL, WelcomePage.class)
-                .doLogin()
-                .fillLoginPage(userAuth.getUsername(), userAuth.getPassword())
-                .submit();
+  @BeforeEach
+  void configure() {
+    new WireMock("http://userdata.nifller.dc", 8089).register(get(urlPathEqualTo("/currentUser"))
+        .willReturn(
+            okJson("{\n" +
+                "      \"id\": \"229fc371-2821-4795-81a5-0b26d3cd417e\",\n" +
+                "      \"username\": \"{{ request.query.username }}\",\n" +
+                "      \"firstname\": null,\n" +
+                "      \"surname\": null,\n" +
+                "      \"currency\": \"RUB\",\n" +
+                "      \"photo\": null\n" +
+                "    }")
+        ));
+  }
 
-        new MainPage()
-                .waitForPageLoaded();
-    }
+  @TestUser()
+  @Test
+  void statisticShouldBeVisibleAfterLogin(@User(OUTER) UserJson user) {
+    Selenide.open(WelcomePage.URL, WelcomePage.class)
+        .doLogin()
+        .fillLoginPage(user.username(), user.testData().password())
+        .submit();
+
+    new MainPage()
+        .waitForPageLoaded();
+  }
 }

@@ -12,6 +12,12 @@ public interface Config {
 
   String authUrl();
 
+  String spendUrl();
+
+  String userdataUrl();
+
+  String gatewayUrl();
+
   String jdbcHost();
 
   String categoryUrl();
