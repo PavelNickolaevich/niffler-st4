@@ -2,10 +2,7 @@ package guru.qa.niffler.api.userdata.user;
 
 import guru.qa.niffler.model.UserJson;
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.Query;
+import retrofit2.http.*;
 
 import java.util.List;
 
@@ -19,4 +16,5 @@ public interface UserApi {
 
     @GET("/allUsers")
     Call<List<UserJson>> allUsers(@Query("username") String username);
+
 }

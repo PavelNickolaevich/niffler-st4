@@ -1,6 +1,7 @@
 buildscript {
     ext {
         protobufVersion = '3.24.3'
+        awaitilityVersion= '4.2.1'
         grpcVersion = '1.58.0'
         junitVersion = '5.10.0'
         allureVersion = '2.24.0'
@@ -148,6 +149,8 @@ dependencies {
     // Lombok
     testAnnotationProcessor "org.projectlombok:lombok:${project.ext.lombokVersion}"
     testCompileOnly "org.projectlombok:lombok:${project.ext.lombokVersion}"
+    // Awaitility
+    implementation "org.awaitility:awaitility:${awaitilityVersion}"
 }
 
 tasks.withType(JavaCompile) {

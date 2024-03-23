@@ -1,5 +1,6 @@
 package guru.qa.niffler.jupiter.annotation;
 
+import guru.qa.niffler.jupiter.annotations.GenerateCategory;
 import guru.qa.niffler.jupiter.extension.CreateUserExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -16,4 +17,8 @@ public @interface TestUser {
   String username() default "";
 
   String password() default "";
+
+  GenerateCategory[] category() default {};
+
+  GenerateSpend[] spend() default {};
 }

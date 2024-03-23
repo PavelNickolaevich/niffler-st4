@@ -16,6 +16,8 @@ public interface Config {
 
   String categoryUrl();
 
+  String userUrl();
+
   String spendUrl();
 
   String currencyGrpcHost();
