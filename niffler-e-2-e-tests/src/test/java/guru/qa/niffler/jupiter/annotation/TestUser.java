@@ -1,5 +1,10 @@
 package guru.qa.niffler.jupiter.annotation;
 
+import guru.qa.niffler.jupiter.annotations.FriendUser;
+import guru.qa.niffler.jupiter.annotations.GenerateCategory;
+import guru.qa.niffler.jupiter.extension.CreateUserExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -13,4 +18,10 @@ public @interface TestUser {
   String username() default "";
 
   String password() default "";
+
+  GenerateCategory[] category() default {};
+
+  GenerateSpend[] spend() default {};
+
+  FriendUser[] friendUser() default {};
 }

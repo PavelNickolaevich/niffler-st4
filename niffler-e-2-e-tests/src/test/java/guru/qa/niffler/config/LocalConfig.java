@@ -44,7 +44,22 @@ public class LocalConfig implements Config {
   }
 
   @Override
+  public String categoryUrl() {
+    return "http://127.0.0.1:8093";
+  }
+
+  @Override
+  public String userUrl() {
+    return "http://127.0.0.1:8089";
+  }
+
+  @Override
   public String currencyGrpcHost() {
+    return "localhost";
+  }
+
+  @Override
+  public String spendGrpcHost() {
     return "localhost";
   }
 }

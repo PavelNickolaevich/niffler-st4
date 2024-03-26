@@ -1,6 +1,7 @@
 package guru.qa.niffler.api.interceptor;
 
 import guru.qa.niffler.jupiter.extension.ApiLoginExtension;
+import guru.qa.niffler.jupiter.extension.ApiLoginExtensionLesson18;
 import guru.qa.niffler.jupiter.extension.ContextHolderExtension.Holder;
 import okhttp3.Interceptor;
 import okhttp3.Response;
@@ -16,7 +17,7 @@ public class CodeInterceptor implements Interceptor {
       final String location = response.header("Location");
       if (location.contains("code=")) {
         final String code = StringUtils.substringAfter(location, "code=");
-        ApiLoginExtension.setCode(
+        ApiLoginExtensionLesson18.setCode(
             Holder.INSTANCE.context(),
             code
         );

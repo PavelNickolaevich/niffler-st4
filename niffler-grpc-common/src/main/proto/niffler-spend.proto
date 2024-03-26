@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/type/date.proto";
+import "niffler-enum.proto";
+
+package guru.qa.grpc.niffler;
+
+option java_multiple_files = true;
+option java_package = "guru.qa.grpc.niffler.grpc";
+option java_outer_classname = "NifflerSpendProto";
+
+service NifflerSpendService {
+  rpc GetSpends (SpendRequest) returns (SpendsResponse) {}
+  rpc GetStatistic (StatisticRequest) returns (StatisticResponse) {}
+  rpc AddSpend (AddSpendRequest) returns (SpendJson) {}
+  rpc EditSpend (EditSpendRequest) returns (SpendJson) {}
+//  rpc DeleteSpend (DeleteSpendRequest) returns (google.protobuf.Empty) {}
+}
+
+message SpendRequest {
+  string username = 1;
+  optional CurrencyValues filterCurrency = 2;
+  optional google.type.Date from = 3;
+  optional google.type.Date to = 4;
+}
+
+message SpendsResponse {
+  repeated SpendJson spendJson = 1;
+}
+
+message StatisticRequest {
+  string username = 1;
+  CurrencyValues userCurrency = 2;
+  optional CurrencyValues filterCurrency = 3;
+  optional google.type.Date dateFrom = 4;
+  optional google.type.Date dateTo = 5;
+}
+
+message StatisticResponse {
+  repeated StatisticJson statisticJson = 1;
+}
+
+message StatisticJson {
+  google.type.Date dateFrom = 1;
+  google.type.Date dateTo = 2;
+  CurrencyValues currency = 3;
+  double total = 4;
+  CurrencyValues userDefaultCurrency = 5;
+  double totalInUserDefaultCurrency = 6;
+  repeated StatisticByCategoryJson categoryStatistics = 7;
+}
+
+message StatisticByCategoryJson {
+  string category = 1;
+  double total = 2;
+  double totalInUserDefaultCurrency = 3;
+  repeated SpendJson spends = 4;
+}
+
+message AddSpendRequest {
+  SpendJson spend = 1;
+}
+
+message EditSpendRequest {
+  SpendJson spend = 1;
+}
+
+message DeleteSpendRequest {
+  string username = 1;
+  repeated string ids = 2;
+}
+
+message SpendJson {
+  string id = 1;
+  google.type.Date spendDate = 2;
+  string category = 3;
+  CurrencyValues currency = 4;
+  double amount = 5;
+  string description = 6;
+  string username = 7;
+}
+

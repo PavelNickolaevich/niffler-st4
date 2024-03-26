@@ -20,14 +20,20 @@ public interface Config {
 
   String jdbcHost();
 
+  String categoryUrl();
+
+  String userUrl();
+
   String currencyGrpcHost();
+
+  String spendGrpcHost();
 
   default String jdbcUser() {
     return "postgres";
   }
 
   default String jdbcPassword() {
-    return "secret";
+    return "root";
   }
 
   default int jdbcPort() {
@@ -37,4 +43,11 @@ public interface Config {
   default int currencyGrpcPort() {
     return 8092;
   }
+
+  default int spendGrpcPort() {
+    return 8095;
+  }
+
+
+
 }

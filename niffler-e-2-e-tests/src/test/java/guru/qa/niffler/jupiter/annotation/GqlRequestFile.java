@@ -12,5 +12,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 @ExtendWith(GqlRequestResolver.class)
 public @interface GqlRequestFile {
-  String value();
+  String value() default "";
 }

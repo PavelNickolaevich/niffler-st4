@@ -63,7 +63,7 @@ spring:
   datasource:
     url: 'jdbc:postgresql://localhost:5432/niffler-userdata'
     username: postgres
-    password: secret
+    password: root
 niffler-userdata:
   base-uri: 'http://127.0.0.1:8089'
 ---

@@ -49,7 +49,23 @@ public class DockerConfig implements Config {
   }
 
   @Override
+  public String categoryUrl() {
+    return null;
+  }
+
+  @Override
+  public String userUrl() {
+    return null;
+  }
+
+
+  @Override
   public String currencyGrpcHost() {
     return "currency.niffler.dc";
+  }
+
+  @Override
+  public String spendGrpcHost() {
+    return "localhost";
   }
 }

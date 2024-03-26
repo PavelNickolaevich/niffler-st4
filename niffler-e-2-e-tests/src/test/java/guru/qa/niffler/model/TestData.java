@@ -1,10 +1,10 @@
 package guru.qa.niffler.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import guru.qa.niffler.jupiter.annotation.UserQueue;
+import guru.qa.niffler.jupiter.annotations.User;
 
 public record TestData(
     @JsonIgnore String password,
-    @JsonIgnore UserQueue.UserType userTypeQueue
+    @JsonIgnore User.UserType userType
 ) {
 }

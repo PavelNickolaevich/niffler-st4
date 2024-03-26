@@ -62,4 +62,26 @@ public class UserRepositoryHibernate extends JpaService implements UserRepositor
     UserEntity toBeDeleted = findByIdInUserdata(id).get();
     remove(USERDATA, toBeDeleted);
   }
+
+  @Override
+  public UserAuthEntity updateUserInAuth(UserAuthEntity user) {
+    return null;
+  }
+
+  @Override
+  public UserEntity updateUserInData(UserEntity user) {
+    return null;
+  }
+
+  @Override
+  public void addFriend(UUID targetUser, UUID friendUser, boolean pending) {
+    UserEntity targetUserEntity = findByIdInUserdata(targetUser).get();
+    UserEntity friendUserEntity = findByIdInUserdata(friendUser).get();
+
+    persist(USERDATA, targetUserEntity);
+    persist(USERDATA, friendUserEntity);
+  }
+
 }
+
+
