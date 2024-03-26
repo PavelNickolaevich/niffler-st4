@@ -24,8 +24,6 @@ public interface Config {
 
   String userUrl();
 
-  String spendUrl();
-
   String currencyGrpcHost();
 
   String spendGrpcHost();

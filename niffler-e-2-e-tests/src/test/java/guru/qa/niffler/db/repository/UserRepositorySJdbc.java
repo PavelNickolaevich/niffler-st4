@@ -213,4 +213,19 @@ public class UserRepositorySJdbc implements UserRepository {
         });
         return user;
     }
+
+    @Override
+    public void addFriend(UUID targetUser, UUID friendUser, boolean pending) {
+        udTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement("INSERT INTO \"friendship\" " +
+                    "(user_id, friend_id, pending) VALUES (?, ? ,?)");
+            ps.setObject(1, targetUser);
+            ps.setObject(2, friendUser);
+            ps.setBoolean(3, pending);
+            ps.executeUpdate();
+            return ps;
+        });
+    }
+
+
 }

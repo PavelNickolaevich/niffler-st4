@@ -28,6 +28,7 @@ public abstract class CreateUserExtensionLesson18 implements BeforeEachCallback,
                 usersForPoint.add(userCreate);
                 createCategory(testUser, userCreate);
                 createSpend(testUser, userCreate);
+                createFriend(testUser, userCreate);
             }
             createdUsers.put(userInfo.getKey(), usersForPoint);
         }
@@ -40,6 +41,9 @@ public abstract class CreateUserExtensionLesson18 implements BeforeEachCallback,
     public abstract UserJson createCategory(TestUser user, UserJson createdUser) throws IOException;
 
     public abstract UserJson createSpend(TestUser user, UserJson createdUser) throws IOException;
+
+    public abstract UserJson createFriend(TestUser user, UserJson createdUser) throws IOException, InterruptedException;
+
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {

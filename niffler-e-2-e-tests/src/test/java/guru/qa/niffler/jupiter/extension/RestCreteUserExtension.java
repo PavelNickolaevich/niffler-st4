@@ -4,14 +4,13 @@ package guru.qa.niffler.jupiter.extension;
 import guru.qa.niffler.api.category.CategoryApiClient;
 import guru.qa.niffler.api.register.RegisterApiClient;
 import guru.qa.niffler.api.spend.SpendApiClient;
+import guru.qa.niffler.api.userdata.friends.FriendsApiClient;
 import guru.qa.niffler.api.userdata.user.UserApiClient;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.jupiter.annotation.TestUser;
+import guru.qa.niffler.jupiter.annotations.FriendUser;
 import guru.qa.niffler.jupiter.annotations.GenerateCategory;
-import guru.qa.niffler.model.CategoryJson;
-import guru.qa.niffler.model.SpendJson;
-import guru.qa.niffler.model.TestData;
-import guru.qa.niffler.model.UserJson;
+import guru.qa.niffler.model.*;
 import guru.qa.niffler.utils.DataUtils;
 
 import java.io.IOException;
@@ -26,6 +25,7 @@ public class RestCreteUserExtension extends CreateUserExtensionLesson18 {
     private final RegisterApiClient registerApiClient = new RegisterApiClient();
     private final CategoryApiClient categoryApiClient = new CategoryApiClient();
     private final SpendApiClient spendApiClient = new SpendApiClient();
+    private final FriendsApiClient friendsApiClient = new FriendsApiClient();
 
     @Override
     public UserJson createUser(TestUser user) throws IOException {
@@ -84,6 +84,41 @@ public class RestCreteUserExtension extends CreateUserExtensionLesson18 {
                     spendData.username()
             );
             spendApiClient.addSpend(spendJson);
+        }
+        return createdUser;
+    }
+
+    @Override
+    public UserJson createFriend(TestUser user, UserJson createdUser) throws IOException {
+
+        for (FriendUser friendUser : user.friendUser()) {
+            String usernameFriend = friendUser.username().isEmpty()
+                    ? DataUtils.generateRandomUsername()
+                    : friendUser.username();
+            String passwordFriend = friendUser.password().isEmpty()
+                    ? "12345"
+                    : friendUser.password();
+
+            String targetUserName = createdUser.username();
+
+            registerApiClient.register(usernameFriend, passwordFriend);
+
+            var userJson = await()
+                    .timeout(60, TimeUnit.SECONDS)
+                    .until(() -> userApiClient.getUserJson(usernameFriend),
+                            userName -> userName.username().equals(usernameFriend));
+
+            FriendJson targetUser = new FriendJson(targetUserName);
+            FriendJson friendUserState = new FriendJson(usernameFriend);
+
+            switch (friendUser.friendState()) {
+                case FRIEND -> {
+                    friendsApiClient.addFriend(targetUser.username(), friendUserState);
+                    friendsApiClient.acceptInvitation(friendUserState.username(), targetUser);
+                }
+                case INVITE_SENT -> friendsApiClient.addFriend(targetUser.username(), friendUserState);
+                case INVITE_RECEIVED -> friendsApiClient.addFriend(friendUserState.username(), targetUser);
+            }
         }
         return createdUser;
     }

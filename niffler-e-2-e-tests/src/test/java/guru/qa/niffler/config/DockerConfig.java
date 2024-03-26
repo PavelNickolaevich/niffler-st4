@@ -58,10 +58,6 @@ public class DockerConfig implements Config {
     return null;
   }
 
-  @Override
-  public String spendUrl() {
-    return null;
-  }
 
   @Override
   public String currencyGrpcHost() {

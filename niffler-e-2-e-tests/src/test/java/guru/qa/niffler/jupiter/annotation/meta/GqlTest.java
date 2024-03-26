@@ -2,6 +2,7 @@ package guru.qa.niffler.jupiter.annotation.meta;
 
 import guru.qa.niffler.jupiter.extension.ContextHolderExtension;
 import guru.qa.niffler.jupiter.extension.DataBaseCreteUserExtension;
+import guru.qa.niffler.jupiter.extension.RestCreteUserExtension;
 import io.qameta.allure.junit5.AllureJunit5;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -13,5 +14,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @ExtendWith({ContextHolderExtension.class, AllureJunit5.class, DataBaseCreteUserExtension.class})
+//@ExtendWith({ContextHolderExtension.class, AllureJunit5.class, RestCreteUserExtension.class})
 public @interface GqlTest {
 }

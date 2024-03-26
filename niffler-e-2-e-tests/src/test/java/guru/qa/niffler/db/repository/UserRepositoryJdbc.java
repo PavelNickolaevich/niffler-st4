@@ -3,7 +3,6 @@ package guru.qa.niffler.db.repository;
 import guru.qa.niffler.db.DataSourceProvider;
 import guru.qa.niffler.db.Database;
 import guru.qa.niffler.db.model.*;
-import io.qameta.allure.Step;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -239,6 +238,22 @@ public class UserRepositoryJdbc implements UserRepository {
                     throw new IllegalStateException(format("Can`t find user with id : %s", user.getId()));
                 }
                 return user;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void addFriend(UUID targetUser , UUID friendUser, boolean pending) {
+        try (Connection conn = udDs.getConnection()) {
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "INSERT INTO \"friendship\" " +
+                            "(user_id, friend_id, pending) VALUES (?, ? ,?)")) {
+                ps.setObject(1, targetUser);
+                ps.setObject(2, friendUser);
+                ps.setBoolean(3, pending);
+                ps.executeUpdate();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

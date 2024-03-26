@@ -72,4 +72,16 @@ public class UserRepositoryHibernate extends JpaService implements UserRepositor
   public UserEntity updateUserInData(UserEntity user) {
     return null;
   }
+
+  @Override
+  public void addFriend(UUID targetUser, UUID friendUser, boolean pending) {
+    UserEntity targetUserEntity = findByIdInUserdata(targetUser).get();
+    UserEntity friendUserEntity = findByIdInUserdata(friendUser).get();
+
+    persist(USERDATA, targetUserEntity);
+    persist(USERDATA, friendUserEntity);
+  }
+
 }
+
+

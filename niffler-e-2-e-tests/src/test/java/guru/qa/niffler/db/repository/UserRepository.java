@@ -23,4 +23,8 @@ public interface UserRepository {
     UserAuthEntity updateUserInAuth(UserAuthEntity user);
 
     UserEntity updateUserInData(UserEntity user);
+
+    void addFriend(UUID targetUser , UUID friendUser, boolean pending);
+
+
 }

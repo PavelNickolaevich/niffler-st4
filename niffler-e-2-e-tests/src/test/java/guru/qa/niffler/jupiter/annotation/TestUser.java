@@ -1,5 +1,6 @@
 package guru.qa.niffler.jupiter.annotation;
 
+import guru.qa.niffler.jupiter.annotations.FriendUser;
 import guru.qa.niffler.jupiter.annotations.GenerateCategory;
 import guru.qa.niffler.jupiter.extension.CreateUserExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,4 +22,6 @@ public @interface TestUser {
   GenerateCategory[] category() default {};
 
   GenerateSpend[] spend() default {};
+
+  FriendUser[] friendUser() default {};
 }
